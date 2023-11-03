@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('activity_members', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->nullable();
+            $table->foreignId('activity_id')->nullable();
+            $table->dateTime('create_date');
+            $table->dateTime('delete_date')->nullable();
             $table->timestamps();
         });
     }

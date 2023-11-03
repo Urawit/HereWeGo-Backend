@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\StoreActivityRequest;
-use App\Http\Requests\UpdateActivityRequest;
-use App\Models\Activity;
+use App\Http\Requests\StoreNotificationRequest;
+use App\Http\Requests\UpdateNotificationRequest;
+use App\Models\Notification;
 
-class ActivityController extends Controller
+class NotificationController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +27,7 @@ class ActivityController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreActivityRequest $request)
+    public function store(StoreNotificationRequest $request)
     {
         //
     }
@@ -35,7 +35,7 @@ class ActivityController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Activity $activity)
+    public function show(Notification $notification)
     {
         //
     }
@@ -43,7 +43,7 @@ class ActivityController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Activity $activity)
+    public function edit(Notification $notification)
     {
         //
     }
@@ -51,7 +51,7 @@ class ActivityController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateActivityRequest $request, Activity $activity)
+    public function update(UpdateNotificationRequest $request, Notification $notification)
     {
         //
     }
@@ -59,7 +59,7 @@ class ActivityController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Activity $activity)
+    public function destroy(Notification $notification)
     {
         //
     }

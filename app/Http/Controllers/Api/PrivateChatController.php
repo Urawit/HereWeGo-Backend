@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\StoreActivityChatRequest;
-use App\Http\Requests\UpdateActivityChatRequest;
-use App\Models\ActivityChat;
+use App\Http\Requests\StorePrivateChatRequest;
+use App\Http\Requests\UpdatePrivateChatRequest;
+use App\Models\PrivateChat;
 
-class ActivityChatController extends Controller
+class PrivateChatController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +27,7 @@ class ActivityChatController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreActivityChatRequest $request)
+    public function store(StorePrivateChatRequest $request)
     {
         //
     }
@@ -35,7 +35,7 @@ class ActivityChatController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(ActivityChat $activityChat)
+    public function show(PrivateChat $privateChat)
     {
         //
     }
@@ -43,7 +43,7 @@ class ActivityChatController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(ActivityChat $activityChat)
+    public function edit(PrivateChat $privateChat)
     {
         //
     }
@@ -51,7 +51,7 @@ class ActivityChatController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateActivityChatRequest $request, ActivityChat $activityChat)
+    public function update(UpdatePrivateChatRequest $request, PrivateChat $privateChat)
     {
         //
     }
@@ -59,7 +59,7 @@ class ActivityChatController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ActivityChat $activityChat)
+    public function destroy(PrivateChat $privateChat)
     {
         //
     }

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\StorePrivateChatRequest;
-use App\Http\Requests\UpdatePrivateChatRequest;
-use App\Models\PrivateChat;
+use App\Http\Requests\StoreUserAcitivityRequest;
+use App\Http\Requests\UpdateUserAcitivityRequest;
+use App\Models\UserAcitivity;
 
-class PrivateChatController extends Controller
+class UserAcitivityController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +27,7 @@ class PrivateChatController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePrivateChatRequest $request)
+    public function store(StoreUserAcitivityRequest $request)
     {
         //
     }
@@ -35,7 +35,7 @@ class PrivateChatController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(PrivateChat $privateChat)
+    public function show(UserAcitivity $userAcitivity)
     {
         //
     }
@@ -43,7 +43,7 @@ class PrivateChatController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(PrivateChat $privateChat)
+    public function edit(UserAcitivity $userAcitivity)
     {
         //
     }
@@ -51,7 +51,7 @@ class PrivateChatController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePrivateChatRequest $request, PrivateChat $privateChat)
+    public function update(UpdateUserAcitivityRequest $request, UserAcitivity $userAcitivity)
     {
         //
     }
@@ -59,7 +59,7 @@ class PrivateChatController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(PrivateChat $privateChat)
+    public function destroy(UserAcitivity $userAcitivity)
     {
         //
     }

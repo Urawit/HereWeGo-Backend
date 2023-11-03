@@ -1,19 +1,31 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreActivityMemberRequest;
 use App\Http\Requests\UpdateActivityMemberRequest;
 use App\Models\ActivityMember;
+use Illuminate\Support\Facades\Auth;
 
 class ActivityMemberController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function joinActivity($id)
     {
-        //
+        $user_id = Auth::id();
+
+        $activityMember = new ActivityMember();
+        $activityMember->user_id = $user_id;
+        $activityMember->activity_id = $id;
+        $activityMember->create_date = now();
+        $activityMember->delete_date = null; // Assuming the user has not left the activity
+        $activityMember->save();
+
+        return response()->json([
+            'message' => 'You have joined the activity successfully',
+            'success' => true,
+            'activity_member' => $activityMember
+        ]);
     }
 
     /**

@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\ActivityController;
+use App\Http\Controllers\Api\ActivityMemberController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
@@ -32,3 +34,8 @@ Route::group([
     Route::post('refresh', [AuthController::class, 'refresh']);
     Route::post('me', [AuthController::class, 'me']);
 });
+
+Route::post('createActivity', [ActivityController::class, 'createActivity']);
+Route::get('getActivity/{id}', [ActivityController::class, 'getActivity']);
+Route::get('getAllActivities', [ActivityController::class, 'getAllActivities']);
+Route::post('joinActivity/{id}', [ActivityMemberController::class, 'joinActivity']);

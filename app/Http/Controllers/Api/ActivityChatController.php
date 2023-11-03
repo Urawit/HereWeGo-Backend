@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\StoreUserAcitivityRequest;
-use App\Http\Requests\UpdateUserAcitivityRequest;
-use App\Models\UserAcitivity;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreActivityChatRequest;
+use App\Http\Requests\UpdateActivityChatRequest;
+use App\Models\ActivityChat;
 
-class UserAcitivityController extends Controller
+class ActivityChatController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +28,7 @@ class UserAcitivityController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreUserAcitivityRequest $request)
+    public function store(StoreActivityChatRequest $request)
     {
         //
     }
@@ -35,7 +36,7 @@ class UserAcitivityController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(UserAcitivity $userAcitivity)
+    public function show(ActivityChat $activityChat)
     {
         //
     }
@@ -43,7 +44,7 @@ class UserAcitivityController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(UserAcitivity $userAcitivity)
+    public function edit(ActivityChat $activityChat)
     {
         //
     }
@@ -51,7 +52,7 @@ class UserAcitivityController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUserAcitivityRequest $request, UserAcitivity $userAcitivity)
+    public function update(UpdateActivityChatRequest $request, ActivityChat $activityChat)
     {
         //
     }
@@ -59,7 +60,7 @@ class UserAcitivityController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(UserAcitivity $userAcitivity)
+    public function destroy(ActivityChat $activityChat)
     {
         //
     }

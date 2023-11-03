@@ -19,16 +19,22 @@ class AuthController extends Controller
     public function register(Request $request) 
     {
         $request->validate([
-            "name" => "required",
+            "username" => "required|unique:users",
             "email" => "required|email|unique:users",
             "password" => "required|confirmed"
         ]);
+        if (User::where('email', $request->get('email'))->exists()) {
+            return ['message' => 'Email already exists', 'success' => false];
+        }
 
-        $user = User::create([
-            "name" => $request->name,
-            "email" => $request->email,
-            "password" => Hash::make($request->password)
-        ]);
+        $user = new User();
+        $user->username = $request->get('username');
+        $user->firstname = $request->get('firstname');
+        $user->lastname = $request->get('lastname');
+        $user->email = $request->get('email');
+        $user->password = Hash::make($request->password); // Hash the password
+        $user->phone = $request->get('phone');
+        $user->save();
 
         $token = Auth::login($user);
 
