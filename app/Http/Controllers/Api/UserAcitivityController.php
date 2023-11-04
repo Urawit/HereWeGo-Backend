@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserAcitivityRequest;
 use App\Http\Requests\UpdateUserAcitivityRequest;
 use App\Models\UserAcitivity;

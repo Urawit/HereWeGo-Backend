@@ -14,11 +14,12 @@ return new class extends Migration
     Schema::create('activities', function (Blueprint $table) {
         $table->id();
         $table->foreignId('user_id')->nullable();
-        $table->string('name');
-        $table->text('detail');
-        $table->integer('maximum');
-        $table->dateTime('start_date');
-        $table->dateTime('end_date');
+        $table->string('name')->nullable();
+        $table->text('detail')->nullable();
+        $table->integer('maximum')->nullable();
+        $table->string('post_image_path')->nullable();
+        $table->dateTime('start_date')->nullable();
+        $table->dateTime('end_date')->nullable();
         $table->dateTime('create_date');
         $table->dateTime('delete_date')->nullable();
         $table->timestamps();

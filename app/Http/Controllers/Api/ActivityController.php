@@ -25,12 +25,24 @@ class ActivityController extends Controller
      */
     public function createActivity(Request $request)
     {
+        $request->validate([
+            "name" => "unique:activities",
+            "image" => "required|max:1024",
+        ]);
         $user = Auth::user();
         $user_id = $user->id;
         $activity = new Activity();
         $activity->user_id = $user_id;
         $activity->name = $request->input('name'); 
         $activity->detail = $request->input('detail'); 
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $fileName = $request->input('name') . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('posts'), $fileName);
+            $activity->post_image_path = 'posts/' . $fileName;
+        }
+
         $activity->maximum = $request->input('maximum'); 
         $activity->start_date = $request->input('start_date'); 
         $activity->end_date = $request->input('end_date'); 
@@ -41,6 +53,32 @@ class ActivityController extends Controller
             'message' => 'activitiy created successfully',
             'success' => true,
             'activity' => $activity
+        ]);
+    }
+
+    public function editActivity(Request $request, $id)
+    {
+        $activity = Activity::find($id);
+        $request->validate([
+            "name" => "unique:activities",
+        ]);
+
+        if ($request->hasFile('post_image')) {
+            $file = $request->file('post_image');
+            $fileName = $request->input('name') . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('posts'), $fileName);
+            $activity->post_image_path = 'posts/' . $fileName;
+        }
+        $activity->name = $request->input('name') ? $request->input('name') : $activity->name; 
+        $activity->detail = $request->input('detail') ? $request->input('datail') : $activity->detail ;
+        $activity->maximum = $request->input('maximum')? $request->input('maximum') : $activity->maximum;
+        $activity->start_date = $request->input('start_date')? $request->input('start_date') : $activity->start_date; 
+        $activity->end_date = $request->input('end_date')? $request->input('end_date') : $activity->end_date;  
+        $activity->save();
+        return response()->json([
+            "status" => true,
+            "message" => "Activity edited successfully",
+            "user" => $activity,
         ]);
     }
 
