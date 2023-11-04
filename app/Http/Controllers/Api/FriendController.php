@@ -4,63 +4,76 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\StoreFriendRequest;
 use App\Http\Requests\UpdateFriendRequest;
+use App\Http\Controllers\Controller;
 use App\Models\Friend;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FriendController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function showFriend()
     {
-        //
+      //$friends = Friend::all()->where("user_id", 1);
+      $friends = Friend::all()->where("user_id", Auth::user()->id);
+      return response()->json([
+        "friends" => $friends,
+        "result" => true
+      ]);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function addFriend(Request $request)
     {
-        //
+      $request->validate([
+        'id' => ['required']
+      ]);
+      //$user_id = 1;
+      $user_id = Auth::user()->id;
+      $friend_id = $request->get("id");
+      $exist = Friend::where('user_id', $user_id)->where('friend_id', $friend_id)->first();
+      if ($exist) {
+        return response()->json([
+          "message" => "ID {$friend_id} has been friend.",
+          "result" => false
+        ]);
+      };
+
+      if ($user_id == $friend_id) {
+        return response()->json([
+          "message" => "Unable to add myself as a friend",
+          "result" => false
+        ]);
+      };
+        
+      $friend = new Friend();
+      $friend->user_id = $user_id;
+      $friend->friend_id = $friend_id;
+      $friend->save();
+      return response()->json([
+        "message" => "Add Friend Success",
+        "result" => true
+      ]);
     }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store()
+    public function deleteFriend(Request $request)
     {
-        //
-    }
+      $request->validate([
+        'id' => ['required']
+      ]);
+      //$user_id = 1;
+      $user_id = Auth::user()->id;
+      $friend_id = $request->get("id");
+      $friend = Friend::where('user_id', $user_id)->where('friend_id', $friend_id)->first();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show()
-    {
-        //
-    }
+      if (!$friend) {
+        return response()->json([
+        "message" => "No friends with ID {$friend_id}.",
+        "result" => false
+        ], 400);
+      }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit()
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update()
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Friend $friend)
-    {
-        //
+      $friend->delete();
+      return response()->json([
+        "message" => "Delete Friend Success",
+        "result" => true
+      ]);
     }
 }

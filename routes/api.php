@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\ActivityController;
 use App\Http\Controllers\Api\ActivityMemberController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\FriendController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -39,3 +40,7 @@ Route::post('createActivity', [ActivityController::class, 'createActivity']);
 Route::get('getActivity/{id}', [ActivityController::class, 'getActivity']);
 Route::get('getAllActivities', [ActivityController::class, 'getAllActivities']);
 Route::post('joinActivity/{id}', [ActivityMemberController::class, 'joinActivity']);
+
+Route::get('myFriends', [FriendController::class, 'showFriend']);
+Route::post('addFriend', [FriendController::class, 'addFriend']);
+Route::post('deleteFriend', [FriendController::class, 'deleteFriend']);

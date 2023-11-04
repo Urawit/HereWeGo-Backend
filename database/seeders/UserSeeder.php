@@ -2,18 +2,17 @@
 
 namespace Database\Seeders;
 
-use App\Models\Friend;
-use Database\Factories\FriendFactory;
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class FriendSeeder extends Seeder
+class UserSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-      Friend::factory(10)->create();
+        User::factory(10)->create();
     }
 }
