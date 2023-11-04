@@ -35,21 +35,11 @@ class UserController extends Controller
 
         $user = Auth::user();
 
-        // if ($request->hasFile('image')) {
-        //     $file = $request->file('image');
-        //     $path = $file->storeAs(
-        //         '/public/avatars',
-        //         $user->id . '.' . $file->getClientOriginalExtension()
-        //     );
-        //     $filePath = str_replace('public/', '', $path);
-        //     $user->image = $filePath;
-        // }
-
         if ($request->hasFile('image')) {
             $file = $request->file('image');
             $fileName = $user->id . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('avatars'), $fileName);
-            $user->image = 'avatars/' . $fileName;
+            $user->image_path = 'avatars/' . $fileName;
         }
 
         $user->username = $request->input('username') ? $request->input('username') : $user->username;
