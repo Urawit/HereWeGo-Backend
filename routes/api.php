@@ -23,8 +23,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/users', [UserController::class, 'getAllUsers']);
-
 Route::group([
     'middleware' => 'api',
     'prefix' => 'auth'
@@ -35,6 +33,10 @@ Route::group([
     Route::post('refresh', [AuthController::class, 'refresh']);
     Route::post('me', [AuthController::class, 'me']);
 });
+
+
+Route::get('/users', [UserController::class, 'getAllUsers']);
+Route::put('/editUser', [UserController::class, 'editUser']);
 
 Route::post('createActivity', [ActivityController::class, 'createActivity']);
 Route::get('getActivity/{id}', [ActivityController::class, 'getActivity']);

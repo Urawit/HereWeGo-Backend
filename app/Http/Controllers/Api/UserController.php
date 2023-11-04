@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -19,61 +20,50 @@ class UserController extends Controller
             'users' => $users
         ]);
     }
-    // /**
-    //  * Show the form for editing the user settings.
-    //  */
-    // public function settings()
-    // {
-    //     $user = User::find(Auth::id());
-    //     // split the name into first and last
-    //     $name = explode(' ', $user->name, 2);
-    //     $first_name = $name[0];
-    //     $last_name = $name[1];
-    //     return view('settings', compact('user', 'first_name', 'last_name'));
-    // }
+    
+    public function editUser(Request $request)
+    {
+        $request->validate([
+            "username" => "unique:users",
+            "email" => "email|unique:users",
+            "password" => "confirmed",
+            "image" => "max:1024",
+        ]);
+        if (User::where('email', $request->get('email'))->exists()) {
+            return ['message' => 'Email already exists', 'success' => false];
+        }
 
-    // public function update(Request $request, User $user)
-    // {
-    //     $request->validate([
-    //         'first_name' =>  ['required', 'string', 'min:1','max:255'],
-    //         'last_name' => ['required', 'string', 'min:1','max:255'],
-    //         'socials' => ['nullable', 'string', 'max:255'],
-    //         // 'email' => 'required|email|max:255|unique:users,email,' . $user->id, // This line enforces unique emails and ignores the current user
-    //         'profile' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg','max:2048'],
-    //         // 'certificates' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg' ,'max:2048'],
-    //         'about' => ['nullable', 'string']
-    //     ]);
+        $user = Auth::user();
 
-    //     $user = User::find(Auth::id());
-        
-    //     // Check if user uploading a file, if uploaded store in storage
-    //     if ($request->hasFile('profile')) {
-    //         $file = $request->file('profile');
-    //         $path = $file->storeAs(
-    //             'public/avatars',
-    //             $user->id . '.' . $file->getClientOriginalExtension()
-    //         );
-    //         $filePath = str_replace('public/', '', $path);
+        // if ($request->hasFile('image')) {
+        //     $file = $request->file('image');
+        //     $path = $file->storeAs(
+        //         '/public/avatars',
+        //         $user->id . '.' . $file->getClientOriginalExtension()
+        //     );
+        //     $filePath = str_replace('public/', '', $path);
+        //     $user->image = $filePath;
+        // }
 
-    //         // Update avatar field in user model
-    //         $user->avatar = $filePath;
-    //     }
-        
-    //     // Check if user uploading a file, if uploaded certificates and store in storage
-    //     if ($request->hasFile('certificates')) {
-    //         $file = $request->file('certificates');
-    //         $filePath = $request->file('certificates')->store('certificates', 'public');
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $fileName = $user->id . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('avatars'), $fileName);
+            $user->image = 'avatars/' . $fileName;
+        }
 
-    //         // Update certificates field in user model
-    //         $user->certificate = $filePath;
-    //     }
-        
-    //     // update other fields
-    //     $user->name = $request->input('first_name') . ' ' . $request->input('last_name');
-    //     // $user->email = Auth::user()->email;
-    //     $user->social = $request->input('socials');
-    //     $user->about = $request->get('about');
-    //     $user->save();
-    //     return redirect()->back()->with('status', 'updated');
-    // }
+        $user->username = $request->input('username') ? $request->input('username') : $user->username;
+        $user->firstname = $request->filled('firstname') ? $request->input('firstname') : $user->firstname;
+        $user->lastname = $request->filled('lastname') ? $request->input('lastname') : $user->lastname;
+        $user->email = $request->input('email') ? $request->input('email') : $user->email;
+        $user->password = Hash::make($request->input('password'));
+        $user->phone = $request->filled('phone') ? $request->input('phone') : $user->phone;
+        $user->save();
+        return response()->json([
+            "status" => true,
+            "message" => "User edited successfully",
+            "user" => $user,
+        ]);
+    }
+
 }
