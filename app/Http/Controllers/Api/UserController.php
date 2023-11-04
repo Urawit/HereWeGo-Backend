@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Activity;
+use App\Models\ActivityMember;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -74,4 +76,18 @@ class UserController extends Controller
         ]);
     }
 
+    public function myActivities()
+    {
+      $myActivities = Activity::where("user_id", "=", Auth::user()->id)->get();
+
+      return response()->json($myActivities);
+    }
+    public function myJoinActivities()
+    {
+      $myJoinActivities = ActivityMember::join('activities', 'activities.id', '=', 'activity_members.activity_id')
+      ->where("activity_members.user_id", Auth::user()->id)
+      ->get(['activity_id', 'name', 'detail', 'maximum', 'post_image_path', 'start_date', 'end_date']);
+
+      return response()->json($myJoinActivities);
+    }
 }

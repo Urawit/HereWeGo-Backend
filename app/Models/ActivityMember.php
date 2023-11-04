@@ -11,9 +11,7 @@ class ActivityMember extends Model
 
     protected $fillable = [
         'user_id',
-        'activity_id',
-        'create_date',
-        'delete_date'
+        'activity_id'
     ];
 
     public function users()

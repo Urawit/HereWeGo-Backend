@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Activity;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,8 +18,9 @@ class ActivityMemberFactory extends Factory
      */
     public function definition(): array
     {
-        return [
-            //
-        ];
+      return [
+        'user_id' => User::all()->random()->id,
+        'activity_id' => Activity::all()->random()->id,
+      ];
     }
 }

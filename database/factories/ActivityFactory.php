@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,8 +17,9 @@ class ActivityFactory extends Factory
      */
     public function definition(): array
     {
+      $user = User::all()->random();
         return [
-            'user_id' => null, 
+            'user_id' => $user->id, 
             'name' => $this->faker->sentence,
             'detail' => $this->faker->paragraph,
             'maximum' => $this->faker->numberBetween(5, 20),
