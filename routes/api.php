@@ -34,9 +34,10 @@ Route::group([
     Route::post('me', [AuthController::class, 'me']);
 });
 
-
+Route::get('/getUserImage', [UserController::class, 'getUserImage']);
 Route::get('/users', [UserController::class, 'getAllUsers']);
 Route::put('/editUser', [UserController::class, 'editUser']);
+
 
 Route::put('editActivity/{id}', [ActivityController::class, 'editActivity']);
 Route::post('createActivity', [ActivityController::class, 'createActivity']);

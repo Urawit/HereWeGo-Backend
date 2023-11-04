@@ -20,6 +20,24 @@ class UserController extends Controller
             'users' => $users
         ]);
     }
+
+    public function getUserImage()
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json([
+                'status' => false,
+                'message' => 'User not authenticated',
+            ], 401);
+        }
+    
+        return response()->json([
+            'status' => true,
+            'message' => 'User image retrieved successfully',
+            'image_path' => $user->image_path,
+        ]);
+    }
     
     public function editUser(Request $request)
     {
