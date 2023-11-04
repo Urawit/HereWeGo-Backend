@@ -109,43 +109,19 @@ class ActivityController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreActivityRequest $request)
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Activity $activity)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Activity $activity)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateActivityRequest $request, Activity $activity)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Activity $activity)
-    {
-        //
+        $activity = Activity::find($id);
+        if (!$activity) {
+            return response()->json([
+                'message' => 'Activity not found',
+                'success' => false,
+            ], 404);
+        }
+        $activity->delete();
+        return response()->json([
+            'message' => 'Activity deleted successfully',
+            'success' => true,
+        ]);
     }
 }
