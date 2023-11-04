@@ -25,7 +25,8 @@ class ActivityController extends Controller
      */
     public function createActivity(Request $request)
     {
-        $user_id = Auth::id();
+        $user = Auth::user();
+        $user_id = $user->id;
         $activity = new Activity();
         $activity->user_id = $user_id;
         $activity->name = $request->input('name'); 
