@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
       $this->call(UserActivitySeeder::class);
       $this->call(FriendSeeder::class);
 
+      $this->call(ActivitySeeder::class);
         // \App\Models\User::factory(10)->create();
 
         // \App\Models\User::factory()->create([

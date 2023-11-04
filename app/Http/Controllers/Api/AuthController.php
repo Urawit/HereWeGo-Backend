@@ -27,6 +27,7 @@ class AuthController extends Controller
             return ['message' => 'Email already exists', 'success' => false];
         }
 
+
         $user = new User();
         $user->username = $request->get('username');
         $user->firstname = $request->get('firstname');
@@ -36,8 +37,15 @@ class AuthController extends Controller
         $user->phone = $request->get('phone');
         $user->save();
 
-        $token = Auth::login($user);
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $fileName = $user->id . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('avatars'), $fileName);
+            $user->image_path = 'avatars/' . $fileName;
+        }
 
+        $token = Auth::login($user);
+        $user->save();
         return response()->json([
             "status" => true,
             "message" => "User created successfully",

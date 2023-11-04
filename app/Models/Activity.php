@@ -14,6 +14,7 @@ class Activity extends Model
         'name',
         'detail',
         'maximum',
+        'post_image_path',
         'start_date',
         'end_date',
         'create_date',

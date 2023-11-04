@@ -20,6 +20,24 @@ class UserController extends Controller
             'users' => $users
         ]);
     }
+
+    public function getUserImage()
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json([
+                'status' => false,
+                'message' => 'User not authenticated',
+            ], 401);
+        }
+    
+        return response()->json([
+            'status' => true,
+            'message' => 'User image retrieved successfully',
+            'image_path' => $user->image_path,
+        ]);
+    }
     
     public function editUser(Request $request)
     {
@@ -35,21 +53,11 @@ class UserController extends Controller
 
         $user = Auth::user();
 
-        // if ($request->hasFile('image')) {
-        //     $file = $request->file('image');
-        //     $path = $file->storeAs(
-        //         '/public/avatars',
-        //         $user->id . '.' . $file->getClientOriginalExtension()
-        //     );
-        //     $filePath = str_replace('public/', '', $path);
-        //     $user->image = $filePath;
-        // }
-
         if ($request->hasFile('image')) {
             $file = $request->file('image');
             $fileName = $user->id . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('avatars'), $fileName);
-            $user->image = 'avatars/' . $fileName;
+            $user->image_path = 'avatars/' . $fileName;
         }
 
         $user->username = $request->input('username') ? $request->input('username') : $user->username;
