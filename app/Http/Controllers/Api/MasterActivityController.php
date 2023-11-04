@@ -2,65 +2,28 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\StoreMasterActivityRequest;
-use App\Http\Requests\UpdateMasterActivityRequest;
+use App\Http\Controllers\Controller;
 use App\Models\MasterActivity;
+use App\Models\UserActivity;
+use Illuminate\Http\Request;
 
 class MasterActivityController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function allActivities()
     {
-        //
-    }
+      $activities = MasterActivity::all();
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+      return response()->json($activities);
     }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreMasterActivityRequest $request)
+    public function selectActivities(Request $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(MasterActivity $masterActivity)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(MasterActivity $masterActivity)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateMasterActivityRequest $request, MasterActivity $masterActivity)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(MasterActivity $masterActivity)
-    {
-        //
+      $request->validate([
+        'user_id' => ['required']
+      ]);
+      $user_id = $request->input('user_id');
+      $subquery = UserActivity::where('user_id', $user_id)->get('master_activity_id');
+      $activities = MasterActivity::whereNotIn('id', $subquery)->get();
+  
+      return response()->json($activities);
     }
 }

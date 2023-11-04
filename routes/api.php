@@ -4,6 +4,8 @@ use App\Http\Controllers\Api\ActivityController;
 use App\Http\Controllers\Api\ActivityMemberController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\FriendController;
+use App\Http\Controllers\Api\MasterActivityController;
+use App\Http\Controllers\Api\UserActivityController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -44,5 +46,13 @@ Route::get('getAllActivities', [ActivityController::class, 'getAllActivities']);
 Route::post('joinActivity/{id}', [ActivityMemberController::class, 'joinActivity']);
 
 Route::get('myFriends', [FriendController::class, 'showFriend']);
+Route::post('statusFriend', [FriendController::class, 'statusFriend']);
 Route::post('addFriend', [FriendController::class, 'addFriend']);
-Route::post('deleteFriend', [FriendController::class, 'deleteFriend']);
+Route::delete('deleteFriend', [FriendController::class, 'deleteFriend']);
+
+Route::get('allActivities', [MasterActivityController::class, 'allActivities']);
+Route::post('selectActivities', [MasterActivityController::class, 'selectActivities']);
+
+Route::get('userActivities', [UserActivityController::class, 'showUserActivities']);
+Route::post('addUserActivity', [UserActivityController::class, 'addUserActivities']);
+Route::delete('deleteUserActivity', [UserActivityController::class, 'deleteUserActivities']);

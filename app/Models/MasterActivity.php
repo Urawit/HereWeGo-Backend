@@ -20,4 +20,8 @@ class MasterActivity extends Model
     {
         return $this->hasMany(Activity::class);
     }
+    public function userActivities()
+    {
+        return $this->hasMany(UserAcitivity::class);
+    }
 }

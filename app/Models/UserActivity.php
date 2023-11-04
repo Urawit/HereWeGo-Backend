@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class UserAcitivity extends Model
+class UserActivity extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'user_id',
-        'masterActivity_id',
+        'master_activity_id',
         'create_date',
         'delete_date'
     ];

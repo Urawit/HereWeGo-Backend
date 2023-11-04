@@ -2,12 +2,14 @@
 
 namespace Database\Factories;
 
+use App\Models\MasterActivity;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\UserAcitivity>
  */
-class UserAcitivityFactory extends Factory
+class UserActivityFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -16,8 +18,11 @@ class UserAcitivityFactory extends Factory
      */
     public function definition(): array
     {
-        return [
-            //
-        ];
+      $user = User::all()->random();
+      $activity = MasterActivity::all()->random();
+      return [
+        'user_id' => $user->id,
+        'master_activity_id' => $activity->id,
+      ];
     }
 }
