@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\ActivityMemberController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\FriendController;
 use App\Http\Controllers\Api\MasterActivityController;
+use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\UserActivityController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
@@ -59,3 +60,5 @@ Route::post('selectActivities', [MasterActivityController::class, 'selectActivit
 Route::get('userActivities', [UserActivityController::class, 'showUserActivities']);
 Route::post('addUserActivity', [UserActivityController::class, 'addUserActivities']);
 Route::delete('deleteUserActivity', [UserActivityController::class, 'deleteUserActivities']);
+
+Route::get('myNotification', [NotificationController::class, 'myNotification']);

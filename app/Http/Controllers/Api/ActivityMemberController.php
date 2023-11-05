@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreActivityMemberRequest;
 use App\Http\Requests\UpdateActivityMemberRequest;
 use App\Models\ActivityMember;
+use App\Models\Notification;
 use Illuminate\Support\Facades\Auth;
 
 class ActivityMemberController extends Controller
@@ -17,9 +18,13 @@ class ActivityMemberController extends Controller
         $activityMember = new ActivityMember();
         $activityMember->user_id = $user_id;
         $activityMember->activity_id = $id;
-        $activityMember->create_date = now();
-        $activityMember->delete_date = null; // Assuming the user has not left the activity
         $activityMember->save();
+
+        $notification = new Notification();
+        $notification->user_id = $user_id;
+        $notification->header = "Join Activity";
+        $notification->detail = "You have joined activity.";
+        $notification->save();
 
         return response()->json([
             'message' => 'You have joined the activity successfully',

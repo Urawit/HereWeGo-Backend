@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreActivityRequest;
 use App\Http\Requests\UpdateActivityRequest;
 use App\Models\Activity;
+use App\Models\ActivityMember;
 // use App\Models\User;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -75,6 +77,15 @@ class ActivityController extends Controller
         $activity->start_date = $request->input('start_date')? $request->input('start_date') : $activity->start_date; 
         $activity->end_date = $request->input('end_date')? $request->input('end_date') : $activity->end_date;  
         $activity->save();
+
+        $activityMember = ActivityMember::where('activity_id', $activity->id)->get();
+        foreach ($activityMember as $member) {
+          $notification = new Notification();
+          $notification->user_id = $member->user_id;
+          $notification->header = "Edit Activity";
+          $notification->detail = "The activity has been updated.";
+          $notification->save();
+        }
         return response()->json([
             "status" => true,
             "message" => "Activity edited successfully",

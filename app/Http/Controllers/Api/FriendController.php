@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Friend;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -46,6 +47,33 @@ class FriendController extends Controller
       $friend->user_id = $user_id;
       $friend->friend_id = $friend_id;
       $friend->save();
+
+      $friend = Friend::where('user_id', $friend_id)->where('friend_id', $user_id)->first();
+      if ($friend) {
+        $notification = new Notification();
+        $notification->user_id = $user_id;
+        $notification->header = "Friend Request";
+        $notification->detail = "You have received a friend request.";
+        $notification->save();
+
+        $notification = new Notification();
+        $notification->user_id = $friend_id;
+        $notification->header = "Friend Request";
+        $notification->detail = "Your friend has received your request.";
+        $notification->save();
+      } else {
+        $notification = new Notification();
+        $notification->user_id = $user_id;
+        $notification->header = "Friend Request";
+        $notification->detail = "You have already sent a friend request.";
+        $notification->save();
+
+        $notification = new Notification();
+        $notification->user_id = $friend_id;
+        $notification->header = "Friend Request";
+        $notification->detail = "You received a friend request";
+        $notification->save();
+      }
 
       return response()->json([
         "message" => "Add Friend Success",
