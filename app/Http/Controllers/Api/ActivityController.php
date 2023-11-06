@@ -35,6 +35,7 @@ class ActivityController extends Controller
         $user_id = $user->id;
         $activity = new Activity();
         $activity->user_id = $user_id;
+        $activity->master_activity_id = $request->input('master_activity_id');
         $activity->name = $request->input('name'); 
         $activity->detail = $request->input('detail');
         $activity->goal = $request->input('goal'); 
@@ -76,6 +77,7 @@ class ActivityController extends Controller
         #goal location
         $activity->name = $request->input('name') ? $request->input('name') : $activity->name; 
         $activity->detail = $request->input('detail') ? $request->input('datail') : $activity->detail ;
+        $activity->master_activity_id = $request->input('master_activity_id') ? $request->input('master_activity_id') : $activity->detail ;
         $activity->maximum = $request->input('maximum')? $request->input('maximum') : $activity->maximum;
         $activity->start_date = $request->input('start_date')? $request->input('start_date') : $activity->start_date; 
         $activity->goal = $request->input('goal') ? $request->input('goal') : $activity->goal;

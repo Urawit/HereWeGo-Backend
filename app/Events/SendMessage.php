@@ -14,7 +14,7 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class MessageSent implements ShouldBroadcast
+class SendMessage implements ShouldBroadcast
 {
   use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -30,11 +30,11 @@ class MessageSent implements ShouldBroadcast
 
   public function broadcastOn()
   {
-      return new PrivateChannel('chat');
+      return new PrivateChannel('chat-channel');
   }
 
-  public function broadcastAs()
-  {
-      return 'message';
-  }
+//   public function broadcastAs()
+//   {
+//       return 'message';
+//   }
 }

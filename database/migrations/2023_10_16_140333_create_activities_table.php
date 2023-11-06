@@ -14,6 +14,7 @@ return new class extends Migration
     Schema::create('activities', function (Blueprint $table) {
         $table->id();
         $table->foreignId('user_id')->nullable();
+        $table->foreignId('master_activity_id')->nullable();
         $table->string('name')->nullable();
         $table->text('detail')->nullable();
         $table->text('goal')->nullable();

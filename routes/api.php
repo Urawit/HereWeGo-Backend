@@ -36,7 +36,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 //from  https://pusher.com/tutorials/how-to-build-a-chat-app-with-vue-js-and-laravel/#defining-routes
 Route::get('/fetchMessages', [ChatController::class, 'fetchMessages']);
-Route::post('/sendMessage', [ChatController::class, 'sendMessage']);
+Route::post('/messageStore', [ChatController::class, 'messageStore']);
 
 
 Route::group([
