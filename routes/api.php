@@ -6,8 +6,10 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\FriendController;
 use App\Http\Controllers\Api\MasterActivityController;
 use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\PrivateChatController;
 use App\Http\Controllers\Api\UserActivityController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\ChatController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,6 +28,17 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+//chat
+// Route::post('message', [PrivateChatController::class, 'message']);
+// Route::get('/all-rooms', [PrivateChat::class, 'getAllrooms']);
+// Route::get('getMessage/{roomId}', [PrivateChat::class, 'getMessage']);
+// Route::post('createMessage/{roomID}', [PrivateChat::class, 'newMessage']);
+
+//from  https://pusher.com/tutorials/how-to-build-a-chat-app-with-vue-js-and-laravel/#defining-routes
+Route::get('/fetchMessages', [ChatController::class, 'fetchMessages']);
+Route::post('/sendMessage', [ChatController::class, 'sendMessage']);
+
+
 Route::group([
     'middleware' => 'api',
     'prefix' => 'auth'
@@ -37,6 +50,7 @@ Route::group([
     Route::post('me', [AuthController::class, 'me']);
 });
 
+Route::get('/getOnlineUser', [UserController::class, 'getOnlineUser']);
 Route::get('/getUserImage', [UserController::class, 'getUserImage']);
 Route::get('/users', [UserController::class, 'getAllUsers']);
 Route::put('/editUser', [UserController::class, 'editUser']);

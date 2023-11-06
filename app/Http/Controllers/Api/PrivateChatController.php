@@ -2,65 +2,42 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\StorePrivateChatRequest;
-use App\Http\Requests\UpdatePrivateChatRequest;
+use App\Events\Message;
+use App\Http\Controllers\Controller;
+use App\Models\ChatRoom;
 use App\Models\PrivateChat;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PrivateChatController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function message(Request $request)
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StorePrivateChatRequest $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(PrivateChat $privateChat)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(PrivateChat $privateChat)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdatePrivateChatRequest $request, PrivateChat $privateChat)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(PrivateChat $privateChat)
-    {
-        //
+        $request->validate([
+            "username" => "required",
+            "message" => "required"
+        ]);
+        event(new Message($request->input('username'), $request->input('message')));
+        return [];
     }
 }
+
+
+// public function getAllrooms() {
+    //     return ChatRoom::all();
+    // }
+    // //class ChatMessage
+    // public function getMessage($roomId){
+    //     return PrivateChat::where('chat_room_id', $roomId)
+    //     ->with('user')
+    //     ->orderBy('created_at','DESC')
+    //     ->get();
+    // }
+    // public function newMessage(Request $request, $roomID){
+    //     $newMessage = new PrivateChat;
+    //     $newMessage->user_id = Auth::id();
+    //     $newMessage->chat_room_id = $roomID;
+    //     $newMessage->message = $request->message;
+    //     $newMessage->save();
+    //     return $newMessage;
+    // }

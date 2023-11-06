@@ -90,4 +90,14 @@ class UserController extends Controller
 
       return response()->json($myJoinActivities);
     }
+
+    public function getOnlineUser()
+    {
+        if (!auth()->check()) {
+            return response()->json(['users' => []]);
+        }
+        $user = User::where('id', auth()->user()->id)->get();
+        return response()->json(['users' => $user]);
+    }
+
 }
