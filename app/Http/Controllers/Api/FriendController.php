@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\SendNotification;
 use App\Http\Controllers\Controller;
 use App\Models\Friend;
 use App\Models\Notification;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -26,13 +28,13 @@ class FriendController extends Controller
       $request->validate([
         'friend_id' => ['required']
       ]);
-      $user_id = Auth::user()->id;
+      $user_id = auth()->user()->id;
       $friend_id = $request->get("friend_id");
 
       $exist = Friend::where('user_id', $user_id)->where('friend_id', $friend_id)->first();
       if ($exist) {
         return response()->json([
-          "message" => "ID {$friend_id} has been friend.",
+          "message" => "ID {$friend_id} has been add.",
           "result" => false
         ]);
       };
@@ -48,31 +50,35 @@ class FriendController extends Controller
       $friend->friend_id = $friend_id;
       $friend->save();
 
-      $friend = Friend::where('user_id', $friend_id)->where('friend_id', $user_id)->first();
-      if ($friend) {
+      $havefriend = Friend::where('user_id', $friend_id)->where('friend_id', $user_id)->first();
+      if ($havefriend) {
         $notification = new Notification();
         $notification->user_id = $user_id;
         $notification->header = "Friend Request";
         $notification->detail = "You have received a friend request.";
         $notification->save();
-
+        broadcast(new SendNotification($notification))->toOthers();
+        
         $notification = new Notification();
         $notification->user_id = $friend_id;
         $notification->header = "Friend Request";
         $notification->detail = "Your friend has received your request.";
         $notification->save();
+        broadcast(new SendNotification($notification))->toOthers();
       } else {
         $notification = new Notification();
         $notification->user_id = $user_id;
         $notification->header = "Friend Request";
         $notification->detail = "You have already sent a friend request.";
         $notification->save();
+        broadcast(new SendNotification($notification))->toOthers();
 
         $notification = new Notification();
         $notification->user_id = $friend_id;
         $notification->header = "Friend Request";
         $notification->detail = "You received a friend request";
         $notification->save();
+        broadcast(new SendNotification($notification))->toOthers();
       }
 
       return response()->json([
@@ -85,7 +91,7 @@ class FriendController extends Controller
       $request->validate([
         'friend_id' => ['required']
       ]);
-      $user_id = Auth::user()->id;
+      $user_id = auth()->user()->id;
       $friend_id = $request->get("friend_id");
 
       $user = Friend::where('user_id', $user_id)->where('friend_id', $friend_id)->first();
@@ -118,17 +124,21 @@ class FriendController extends Controller
       $request->validate([
         'friend_id' => ['required']
       ]);
-      $user_id = Auth::user()->id;
+      $user_id = auth()->user()->id;
       $friend_id = $request->get("friend_id");
 
+      $user = Friend::where('user_id', $friend_id)->where('friend_id', $user_id)->first();
       $friend = Friend::where('user_id', $user_id)->where('friend_id', $friend_id)->first();
       if (!$friend) {
         return response()->json([
-        "message" => "No friends with ID {$friend_id}.",
-        "result" => false
+          "message" => "No friends with ID {$friend_id}.",
+          "result" => false
         ]);
       }
-
+      
+      if($user) {
+        $user->delete();
+      }
       $friend->delete();
 
       return response()->json([
