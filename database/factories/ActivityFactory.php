@@ -25,7 +25,7 @@ class ActivityFactory extends Factory
             'goal' => $this->faker->paragraph,
             'location' => $this->faker->city,
             'maximum' => $this->faker->numberBetween(5, 20),
-            'post_image_path' => $this->faker->imageUrl(), 
+            'post_image_path' => "avatars/default.png", 
             'start_date' => $this->faker->dateTimeBetween('-1 week', '+1 week'),
             'end_date' => $this->faker->dateTimeBetween('+2 weeks', '+4 weeks'),
             'create_date' => now(),
