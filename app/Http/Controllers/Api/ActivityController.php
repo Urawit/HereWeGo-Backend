@@ -31,8 +31,9 @@ class ActivityController extends Controller
             "name" => "unique:activities",
             "image" => "required|max:1024",
         ]);
-        $user = Auth::user();
-        $user_id = $user->id;
+        // $user = Auth::user();
+        // $user_id = $user->id;
+        $user_id = $request->input('user_id');
         $activity = new Activity();
         $activity->user_id = $user_id;
         $activity->master_activity_id = $request->input('master_activity_id');
