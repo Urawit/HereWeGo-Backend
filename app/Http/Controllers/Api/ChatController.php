@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 // use App\Models\Message;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth as FacadesAuth;
 use App\Events\SendMessage;
 use App\Models\Message;
-use Tymon\JWTAuth\Contracts\Providers\Auth;
+use Illuminate\Support\Facades\Auth;
+use Tymon\JWTAuth\Contracts\Providers\Auth as ProvidersAuth;
 
 class ChatController extends Controller
 {

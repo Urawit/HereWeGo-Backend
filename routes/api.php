@@ -72,6 +72,9 @@ Route::delete('deleteFriend', [FriendController::class, 'deleteFriend']);
 Route::get('allActivities', [MasterActivityController::class, 'allActivities']);
 Route::post('selectActivities', [MasterActivityController::class, 'selectActivities']);
 
+Route::get('isMember/{id}', [ActivityMemberController::class, 'isMember']);
+Route::get('get-all-member/{id}', [ActivityMemberController::class, 'getAllMember']);
+
 Route::get('userActivities', [UserActivityController::class, 'showUserActivities']);
 Route::post('addUserActivity', [UserActivityController::class, 'addUserActivities']);
 Route::delete('deleteUserActivity', [UserActivityController::class, 'deleteUserActivities']);
