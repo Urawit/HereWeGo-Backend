@@ -56,6 +56,7 @@ Route::get('/users', [UserController::class, 'getAllUsers']);
 Route::put('/editUser', [UserController::class, 'editUser']);
 Route::get('/myActivities', [UserController::class, 'myActivities']);
 Route::get('/myJoinActivities', [UserController::class, 'myJoinActivities']);
+Route::get('/find-user/{id}', [UserController::class, 'findUserByID']);
 
 Route::get('getActiveActivities', [ActivityController::class, 'getActiveActivities']);
 Route::put('editActivity/{id}', [ActivityController::class, 'editActivity']);

@@ -100,4 +100,9 @@ class UserController extends Controller
         return response()->json(['users' => $user]);
     }
 
+    public function findUserByID($user_id){
+        $user = User::where('id', $user_id)->first();
+        return $user;
+    }
+
 }
