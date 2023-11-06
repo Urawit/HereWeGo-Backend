@@ -69,6 +69,7 @@ Route::post('statusFriend', [FriendController::class, 'statusFriend']);
 Route::post('addFriend', [FriendController::class, 'addFriend']);
 Route::delete('deleteFriend', [FriendController::class, 'deleteFriend']);
 
+Route::get('get-master-activity-name/{id}', [MasterActivityController::class, 'getMasterActivityName']);
 Route::get('allActivities', [MasterActivityController::class, 'allActivities']);
 Route::post('selectActivities', [MasterActivityController::class, 'selectActivities']);
 

@@ -26,4 +26,13 @@ class MasterActivityController extends Controller
   
       return response()->json($activities);
     }
+    public function getMasterActivityName($master_activity_id)
+    {
+        $masterActivity = MasterActivity::find($master_activity_id);
+        if ($masterActivity) {
+            return $masterActivity->name;
+        } else {
+            return 'Master Activity not found';
+        }
+    }
 }
