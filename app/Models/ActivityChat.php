@@ -12,10 +12,14 @@ class ActivityChat extends Model
     protected $fillable = [
         'activity_id',
         'user_id',
-        'message',
         'create_date',
         'delete_date'
     ];
+    
+    public function messages()
+    {
+        return $this->hasMany(Message::class, 'activity_chat_id');
+    }
 
     public function activities()
     {

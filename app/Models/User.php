@@ -73,6 +73,16 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(PrivateChat::class, 'friends_id');
     }
 
+    public function activityChats()
+    {
+        return $this->hasMany(ActivityChat::class, 'user_id', 'activity_id', 'message_id');
+    }
+
+    public function activityMembers()
+    {
+        return $this->hasMany(ActivityMember::class, 'activity_id');
+    }
+
     public function userActivities()
     {
         return $this->hasMany(UserActivity::class);

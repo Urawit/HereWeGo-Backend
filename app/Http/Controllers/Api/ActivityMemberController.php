@@ -84,8 +84,9 @@ class ActivityMemberController extends Controller
         ]);
     }
 
-    public function getAllMember($activity_id){
-        $user = ActivityMember::where('activity_id', $activity_id)->get();
-        return $user;
+    public function getAllMember($activity_id)
+    {
+        $users = ActivityMember::where('activity_id', $activity_id)->with('user')->get();
+        return $users->pluck('user');
     }
 }

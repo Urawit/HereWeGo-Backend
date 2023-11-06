@@ -12,23 +12,22 @@ class PrivateChat extends Model
     protected $fillable = [
         'friend_id',
         'user_id',
-        'chat_room_id',
-        'message',
         'create_date',
         'delete_date'
     ];
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class, 'private_chat_id');
+    }
 
     public function friends()
     {
         return $this->belongsTo(User::class, 'friends_id');
     }
+    public function users()
+    {
+        return $this->belongsTo(User::class);
+    }
 
-    // public function room()
-    // {
-    //     return $this->hasOne(ChatRoom::class, 'id', 'chat_room_id');
-    // }
-    // public function user()
-    // {
-    //     return $this->hasOne(User::class, 'id', 'user_id');
-    // }
 }
