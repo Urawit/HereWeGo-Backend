@@ -36,7 +36,9 @@ class ActivityController extends Controller
         $activity = new Activity();
         $activity->user_id = $user_id;
         $activity->name = $request->input('name'); 
-        $activity->detail = $request->input('detail'); 
+        $activity->detail = $request->input('detail');
+        $activity->goal = $request->input('goal'); 
+        $activity->location = $request->input('location');
 
         if ($request->hasFile('image')) {
             $file = $request->file('image');
@@ -71,10 +73,13 @@ class ActivityController extends Controller
             $file->move(public_path('posts'), $fileName);
             $activity->post_image_path = 'posts/' . $fileName;
         }
+        #goal location
         $activity->name = $request->input('name') ? $request->input('name') : $activity->name; 
         $activity->detail = $request->input('detail') ? $request->input('datail') : $activity->detail ;
         $activity->maximum = $request->input('maximum')? $request->input('maximum') : $activity->maximum;
         $activity->start_date = $request->input('start_date')? $request->input('start_date') : $activity->start_date; 
+        $activity->goal = $request->input('goal') ? $request->input('goal') : $activity->goal;
+        $activity->location = $request->input('location') ? $request->input('location') : $activity->location;
         $activity->end_date = $request->input('end_date')? $request->input('end_date') : $activity->end_date;  
         $activity->save();
 

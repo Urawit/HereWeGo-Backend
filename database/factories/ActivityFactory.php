@@ -22,6 +22,8 @@ class ActivityFactory extends Factory
             'user_id' => $user->id, 
             'name' => $this->faker->sentence,
             'detail' => $this->faker->paragraph,
+            'goal' => $this->faker->paragraph,
+            'location' => $this->faker->city,
             'maximum' => $this->faker->numberBetween(5, 20),
             'post_image_path' => $this->faker->imageUrl(), 
             'start_date' => $this->faker->dateTimeBetween('-1 week', '+1 week'),

@@ -16,6 +16,8 @@ return new class extends Migration
         $table->foreignId('user_id')->nullable();
         $table->string('name')->nullable();
         $table->text('detail')->nullable();
+        $table->text('goal')->nullable();
+        $table->string('location')->nullable();
         $table->integer('maximum')->nullable();
         $table->string('post_image_path')->nullable();
         $table->dateTime('start_date')->nullable();
