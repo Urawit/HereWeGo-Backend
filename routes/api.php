@@ -57,6 +57,7 @@ Route::put('/editUser', [UserController::class, 'editUser']);
 Route::get('/myActivities', [UserController::class, 'myActivities']);
 Route::get('/myJoinActivities', [UserController::class, 'myJoinActivities']);
 
+Route::get('getActiveActivities', [ActivityController::class, 'getActiveActivities']);
 Route::put('editActivity/{id}', [ActivityController::class, 'editActivity']);
 Route::post('createActivity', [ActivityController::class, 'createActivity']);
 Route::get('getActivity/{id}', [ActivityController::class, 'getActivity']);

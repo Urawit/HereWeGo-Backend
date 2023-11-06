@@ -140,4 +140,14 @@ class ActivityController extends Controller
             'success' => true,
         ]);
     }
+    public function getActiveActivities()
+    {
+        $activities = Activity::where('start_date', '>', now())->orderBy('start_date')->get();
+
+        return response()->json([
+            'message' => 'All activities retrieved successfully',
+            'success' => true,
+            'activities' => $activities
+        ]);
+    }
 }
