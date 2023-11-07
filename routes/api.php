@@ -35,7 +35,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // Route::post('createMessage/{roomID}', [PrivateChat::class, 'newMessage']);
 
 //from  https://pusher.com/tutorials/how-to-build-a-chat-app-with-vue-js-and-laravel/#defining-routes
-Route::get('/fetchMessages', [ChatController::class, 'fetchMessages']);
+Route::post('/fetchMessages', [ChatController::class, 'fetchMessages']);
 Route::post('/messageStore', [ChatController::class, 'messageStore']);
 
 

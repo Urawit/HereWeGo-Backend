@@ -12,8 +12,7 @@ class PrivateChat extends Model
     protected $fillable = [
         'friend_id',
         'user_id',
-        'create_date',
-        'delete_date'
+        'message',
     ];
 
     public function messages()

@@ -28,6 +28,11 @@ class SendNotification implements ShouldBroadcast
 
   public function broadcastOn()
   {
-      return new PrivateChannel('notification-channel');
+    return 'Private';
+  }
+
+  public function broadcastAs()
+  {
+    return 'Notification';
   }
 }

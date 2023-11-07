@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('activity_chats', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('activity_id');
+            $table->foreignId('user_id');
+            $table->text('message');
             $table->timestamps();
         });
     }

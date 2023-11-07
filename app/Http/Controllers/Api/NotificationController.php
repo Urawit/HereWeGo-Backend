@@ -17,6 +17,9 @@ class NotificationController extends Controller
       ->orderBy("created_at","desc")
       ->get(['id', 'header', 'detail', 'created_at']);
 
-      return response()->json($notifications);
+      return response()->json([
+        "notifications" => $notifications,
+        "result" => true
+      ]);
     }
 }

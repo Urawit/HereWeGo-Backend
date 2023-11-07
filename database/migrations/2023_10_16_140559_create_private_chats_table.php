@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('private_chats', function (Blueprint $table) {
             $table->id();
-            $table->integer('chat_room_id');
-            $table->integer('user_id');
-            $table->mediumText('message');
+            $table->foreignId('friend_id');
+            $table->foreignId('user_id');
+            $table->text('message');
             $table->timestamps();
         });
     }

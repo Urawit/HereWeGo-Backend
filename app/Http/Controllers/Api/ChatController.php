@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Events\SendMessage;
+use App\Events\SendPrivateChat;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Message;
 use App\Models\User;
+use App\Models\PrivateChat;
+use App\Models\Friend;
+
+
 
 class ChatController extends Controller
 {
@@ -16,13 +20,38 @@ class ChatController extends Controller
    }
 
 
-   public function fetchMessages()
+   public function fetchMessages(Request $request)
    {
-      $user = auth()->user()->id;
-      return Message::where('user_id', $user)
-      ->orderBy("created_at","desc")
-      ->get();
+    $user_id = auth()->user()->id;
+    $friend_id = $request->input('friend_id');
+    $isFriend = Friend::where('user_id', $user_id)->where('friend_id', $friend_id)->first();
+    
+    if (!$isFriend) {
+      return response()->json([
+        "message" => "ID {$friend_id} not your friend.",
+        "result" => false
+      ]);
+    }
+  
+    $result = PrivateChat::whereIn('friend_id', function($query) use ($user_id, $friend_id) {
+      $query->select('id')
+        ->from('friends')
+        ->where(function ($subquery) use ($user_id, $friend_id) {
+          $subquery->where('user_id', $user_id)
+            ->where('friend_id', $friend_id);
+        })
+        ->orWhere(function ($subquery) use ($user_id, $friend_id) {
+          $subquery->where('user_id', $friend_id)
+            ->where('friend_id', $user_id);
+        });
+    })->get();
+
+    return response()->json([
+      "chats" => $result,
+      "result" => true
+    ]);
    }
+   
 
    public function messageStore(Request $request)
    {
@@ -30,12 +59,23 @@ class ChatController extends Controller
       $friend = User::where('id', $request->input('friend_id'))->first();
       $messageText = $request->input('message');
 
-      $message = new Message();
+      $isFriend = Friend::where('user_id', $user->id)
+        ->where('friend_id', $friend->id)
+        ->first();
+      if (!$isFriend) {
+        return response()->json([
+          "message" => "ID {$friend_id} not your friend.",
+          "result" => false
+        ]);
+      };
+
+      $message = new PrivateChat();
+      $message->friend_id = $isFriend->id;
       $message->user_id = $user->id;
       $message->message = $messageText;
       $message->save();
 
-      broadcast(new SendMessage($friend, $message))->toOthers();
+      broadcast(new SendPrivateChat($message))->toOthers();
     
       return ['status' => 'Message Sent!'];
    }
