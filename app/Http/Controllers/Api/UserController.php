@@ -53,7 +53,7 @@ class UserController extends Controller
             return ['message' => 'Email already exists', 'success' => false];
         }
 
-        $user = auth()->user();
+        $user = User::where('id', auth()->user()->id)->first();
 
         if ($request->hasFile('image')) {
             $file = $request->file('image');
