@@ -15,7 +15,7 @@ class FriendController extends Controller
     public function showFriend()
     {
       $friends = Friend::join('users', 'friends.friend_id', '=', 'users.id')
-      ->where('friends.user_id', Auth::user()->id)
+      ->where('friends.user_id', auth()->user()->id)
       ->get(['friend_id', 'username', 'firstname', 'lastname', 'phone', 'email']);
 
       return response()->json([

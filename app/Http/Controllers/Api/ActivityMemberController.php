@@ -36,7 +36,7 @@ class ActivityMemberController extends Controller
 
     public function joinActivity($id)
     {
-        $user_id = Auth::id();
+        $user_id = auth()->user()->id;
 
         // Check if the user is already a member of the activity
         $existingMember = ActivityMember::where('user_id', $user_id)->where('activity_id', $id)->first();
@@ -68,7 +68,7 @@ class ActivityMemberController extends Controller
 
     public function isMember($id)
     {
-        $user_id = Auth::id();
+        $user_id = auth()->user()->id;
         $existingMember = ActivityMember::where('user_id', $user_id)->where('activity_id', $id)->first();
 
         if ($existingMember) {

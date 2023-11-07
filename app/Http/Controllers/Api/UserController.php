@@ -25,7 +25,7 @@ class UserController extends Controller
 
     public function getUserImage()
     {
-        $user = Auth::user();
+        $user = auth()->user();
 
         if (!$user) {
             return response()->json([
@@ -53,7 +53,7 @@ class UserController extends Controller
             return ['message' => 'Email already exists', 'success' => false];
         }
 
-        $user = Auth::user();
+        $user = auth()->user();
 
         if ($request->hasFile('image')) {
             $file = $request->file('image');
@@ -78,14 +78,14 @@ class UserController extends Controller
 
     public function myActivities()
     {
-      $myActivities = Activity::where("user_id", "=", Auth::user()->id)->get();
+      $myActivities = Activity::where("user_id", "=", auth()->user()->id)->get();
 
       return response()->json($myActivities);
     }
     public function myJoinActivities()
     {
       $myJoinActivities = ActivityMember::join('activities', 'activities.id', '=', 'activity_members.activity_id')
-      ->where("activity_members.user_id", Auth::user()->id)
+      ->where("activity_members.user_id", auth()->user()->id)
       ->get(['activity_id', 'name', 'detail', 'maximum', 'post_image_path', 'start_date', 'end_date']);
 
       return response()->json($myJoinActivities);
