@@ -10,6 +10,9 @@ use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\UserActivityController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ChatController;
+use App\Http\Controllers\Api\CommentController;
+use App\Http\Controllers\Api\FavoriteController;
+use App\Http\Controllers\Api\LikeController;
 use App\Http\Controllers\Api\PrivateChatController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -88,3 +91,14 @@ Route::post('addUserActivity', [UserActivityController::class, 'addUserActivitie
 Route::delete('deleteUserActivity', [UserActivityController::class, 'deleteUserActivities']);
 
 Route::get('myNotification', [NotificationController::class, 'myNotification']);
+
+Route::post('like', [LikeController::class, 'like']);
+Route::post('unlike', [LikeController::class, 'unlike']);
+
+Route::post('comment', [CommentController::class, 'comment']);
+Route::post('delete-comment', [CommentController::class, 'deleteComment']);
+Route::put('edit-comment', [CommentController::class, 'editComment']);
+
+Route::post('favorite', [FavoriteController::class, 'favorite']);
+Route::post('unfavorite', [FavoriteController::class, 'unFavorite']);
+
