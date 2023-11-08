@@ -119,7 +119,7 @@ class ActivityController extends Controller
 
     public function getAllActivities()
     {
-        $activities = Activity::all();
+        $activities = Activity::all()->where('end_date', '<=', 'now()');
 
         return response()->json([
             'message' => 'All activities retrieved successfully',

@@ -28,8 +28,6 @@ class ActivityFactory extends Factory
             'post_image_path' => "avatars/default.png", 
             'start_date' => $this->faker->dateTimeBetween('-1 week', '+1 week'),
             'end_date' => $this->faker->dateTimeBetween('+2 weeks', '+4 weeks'),
-            'create_date' => now(),
-            'delete_date' => null,
         ];
     }
 }

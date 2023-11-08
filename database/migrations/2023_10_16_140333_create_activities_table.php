@@ -23,8 +23,6 @@ return new class extends Migration
         $table->string('post_image_path')->nullable();
         $table->dateTime('start_date')->nullable();
         $table->dateTime('end_date')->nullable();
-        $table->dateTime('create_date');
-        $table->dateTime('delete_date')->nullable();
         $table->timestamps();
     });
 }

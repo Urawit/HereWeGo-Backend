@@ -19,9 +19,7 @@ class Activity extends Model
         'location',
         'post_image_path',
         'start_date',
-        'end_date',
-        'create_date',
-        'delete_date'
+        'end_date'
     ];
 
     public function users()
