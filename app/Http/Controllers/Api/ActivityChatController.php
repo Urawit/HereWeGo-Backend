@@ -20,7 +20,6 @@ class ActivityChatController extends Controller
     $request->validate([
         "activity_id" => "required"
     ]);
-    $user_id = auth()->user()->id;
     $activity_id = $request->input('activity_id');
 
     $isMember = ActivityMember::where('user_id', auth()->user()->id)->where('activity_id', $activity_id)->first();
@@ -32,14 +31,16 @@ class ActivityChatController extends Controller
         ]);
     }
   
-    $result = ActivityChat::whereIn('activity_id', function($query) use ($user_id, $activity_id) {
-      $query->select('id')
-        ->from('activities')
-        ->where(function ($subquery) use ($user_id, $activity_id) {
-          $subquery->where('user_id', $user_id)
-            ->where('activity_id', $activity_id);
-        });
-    })->get();
+    // $result = ActivityChat::whereIn('activity_id', function($query) use ($user_id, $activity_id) {
+    //   $query->select('id')
+    //     ->from('activities')
+    //     ->where(function ($subquery) use ($user_id, $activity_id) {
+    //       $subquery->where('user_id', $user_id)
+    //         ->where('activity_id', $activity_id);
+    //     });
+    // })->get();
+    $result = ActivityChat::where('activity_id', $activity_id)
+    ->get();
 
     return response()->json([
       "chats" => $result,

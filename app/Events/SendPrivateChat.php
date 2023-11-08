@@ -15,10 +15,13 @@ class SendPrivateChat implements ShouldBroadcast
   use Dispatchable, InteractsWithSockets, SerializesModels;
 
   public $message;
+  // public $user;
 
+  // public function __construct(PrivateChat $message,User $user)
   public function __construct(PrivateChat $message)
   {
       $this->message = $message;
+      // $this->user = $user;
   }
 
 

@@ -92,17 +92,43 @@ class ActivityMemberController extends Controller
 
     // chat
     // used in messaage.page to display group that you are in -> just to chat
+    // also show all atribute of the member
+    // public function showMemberActivity()
+    // {
+
+    //     $activities = ActivityMember::join('activities','activity_members.activity_id', '=', 'activities.id')
+    //     ->where('activity_members.user_id',auth()->user()->id)
+    //     ->select('activities.*')
+    //     ->get(); 
+
+    //     return response()->json([
+    //         'activities' => $activities,
+    //     ]);
+    // }
+
     public function showMemberActivity()
     {
-        $userId = auth()->id();
+        $activities = ActivityMember::join('activities', 'activity_members.activity_id', '=', 'activities.id')
+            ->where('activity_members.user_id', auth()->user()->id)
+            ->select('activities.*')
+            ->get(); 
 
-        $activities = ActivityMember::join('activities','activity_members.activity_id', '=', 'activities.id')
-        ->where('activity_members.user_id',auth()->user()->id)
-        ->get('activities.name'); 
+        $activityIds = $activities->pluck('id');
+
+        $allMembers = collect();
+        foreach ($activityIds as $activityId) {
+            $users = ActivityMember::where('activity_id', $activityId)->with('user')->get();
+            foreach ($users as $user) {
+                $allMembers->push($user->user); // Extracting only the 'user' information
+            }
+        }
 
         return response()->json([
             'activities' => $activities,
+            'allMembers' => $allMembers,
         ]);
     }
+
+
 
 }
