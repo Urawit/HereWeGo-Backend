@@ -40,6 +40,7 @@ class ActivityChatController extends Controller
     //     });
     // })->get();
     $result = ActivityChat::where('activity_id', $activity_id)
+    ->join('users as us', 'us.id', '=', 'activity_chats.user_id')
     ->get();
 
     return response()->json([

@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\UserActivityController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ChatController;
+use App\Http\Controllers\Api\PrivateChatController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -34,11 +35,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // Route::get('getMessage/{roomId}', [PrivateChat::class, 'getMessage']);
 // Route::post('createMessage/{roomID}', [PrivateChat::class, 'newMessage']);
 
-Route::post('/fetchMessages', [ChatController::class, 'fetchMessages']);
-Route::post('/messageStore', [ChatController::class, 'messageStore']);
+Route::post('/fetchMessages', [PrivateChatController::class, 'fetchMessages']);
+Route::post('/messageStore', [PrivateChatController::class, 'messageStore']);
 
 Route::post('/fetch-group-messages', [ActivityChatController::class, 'fetchGroupMessages']);
 Route::post('/group-message-store', [ActivityChatController::class, 'groupMessageStore']);
+
+Route::get('myFriends', [ChatController::class, 'chatAll']);
+
 
 Route::group([
     'middleware' => 'api',
@@ -65,7 +69,7 @@ Route::post('createActivity', [ActivityController::class, 'createActivity']);
 Route::get('getActivity/{id}', [ActivityController::class, 'getActivity']);
 Route::get('getAllActivities', [ActivityController::class, 'getAllActivities']);
 
-Route::get('myFriends', [FriendController::class, 'showFriend']);
+//Route::get('myFriends', [FriendController::class, 'showFriend']);
 Route::post('statusFriend', [FriendController::class, 'statusFriend']);
 Route::post('addFriend', [FriendController::class, 'addFriend']);
 Route::delete('deleteFriend', [FriendController::class, 'deleteFriend']);

@@ -9,7 +9,7 @@ use App\Models\Message;
 use App\Models\User;
 use App\Models\PrivateChat;
 use App\Models\Friend;
-
+use Illuminate\Support\Facades\DB;
 
 
 class ChatController extends Controller
@@ -19,64 +19,56 @@ class ChatController extends Controller
        $this->middleware('auth');
    }
 
-
-   public function fetchMessages(Request $request)
+   public function chatAll()
    {
-    $user_id = auth()->user()->id;
-    $friend_id = $request->input('friend_id');
-    $isFriend = Friend::where('user_id', $user_id)->where('friend_id', $friend_id)->first();
-    
-    if (!$isFriend) {
-      return response()->json([
-        "message" => "ID {$friend_id} not your friend.",
-        "result" => false
-      ]);
-    }
-  
-    $result = PrivateChat::whereIn('friend_id', function($query) use ($user_id, $friend_id) {
-      $query->select('id')
-        ->from('friends')
-        ->where(function ($subquery) use ($user_id, $friend_id) {
-          $subquery->where('user_id', $user_id)
-            ->where('friend_id', $friend_id);
-        })
-        ->orWhere(function ($subquery) use ($user_id, $friend_id) {
-          $subquery->where('user_id', $friend_id)
-            ->where('friend_id', $user_id);
-        });
-    })->get();
+     $user_id = auth()->user()->id;
 
-    return response()->json([
-      "chats" => $result,
-      "result" => true
-    ]);
+     $private = Friend::select('friends.id', 'friends.friend_id', 'users.username as name', 'private_chats.message', 'private_chats.created_at')
+     ->join('users', 'friends.friend_id', '=', 'users.id')
+     ->join('private_chats', 'friends.id', '=', 'private_chats.friend_id')
+     ->whereIn('friends.friend_id', function ($query) use ($user_id) {
+         $query->select('user_id')
+             ->from('friends')
+             ->where('friend_id', $user_id);
+     })
+     ->where('friends.user_id', $user_id)
+     ->whereIn(DB::raw('(friends.id, private_chats.created_at)'), function ($query) use ($user_id) {
+         $query->select('friends.id', DB::raw('MAX(private_chats.created_at)'))
+             ->from('friends')
+             ->join('private_chats', 'friends.id', '=', 'private_chats.friend_id')
+             ->whereIn('friends.friend_id', function ($subquery) use ($user_id) {
+                 $subquery->select('user_id')
+                     ->from('friends')
+                     ->where('friend_id', $user_id);
+             })
+             ->where('friends.user_id', $user_id)
+             ->groupBy('friends.id');
+     })
+     ->orderBy('private_chats.created_at', 'desc')
+     ->get();
+
+     $group = DB::table('activity_members as am')
+     ->select('am.activity_id as id', 'at.name', 'ac.message', 'ac.created_at')
+     ->join('activity_chats as ac', 'ac.activity_id', '=', 'am.activity_id')
+     ->join('activities as at', 'at.id', '=', 'am.activity_id')
+     ->where('am.user_id', $user_id)
+     ->whereIn(DB::raw('(am.activity_id, ac.created_at)'), function ($query) use ($user_id) {
+         $query->select('am.activity_id', DB::raw('MAX(ac.created_at)'))
+             ->from('activity_members as am')
+             ->join('activity_chats as ac', 'ac.activity_id', '=', 'am.activity_id')
+             ->where('am.user_id', $user_id)
+             ->groupBy('am.activity_id');
+     })
+     ->orderBy('ac.created_at', 'desc')
+     ->get();
+
+      $results = $private->union($group)->sortByDesc('created_at');
+
+     return response()->json([
+       "chats" => $results,
+       "result" => true
+     ]);
    }
-   
 
-   public function messageStore(Request $request)
-   {
-      $user = auth()->user();
-      $friend = User::where('id', $request->input('friend_id'))->first();
-      $messageText = $request->input('message');
 
-      $isFriend = Friend::where('user_id', $user->id)
-        ->where('friend_id', $friend->id)
-        ->first();
-      if (!$isFriend) {
-        return response()->json([
-          "message" => "ID {$friend_id} not your friend.",
-          "result" => false
-        ]);
-      };
-
-      $message = new PrivateChat();
-      $message->friend_id = $isFriend->id;
-      $message->user_id = $user->id;
-      $message->message = $messageText;
-      $message->save();
-
-      broadcast(new SendPrivateChat($message))->toOthers();
-    
-      return ['status' => 'Message Sent!'];
-   }
 }

@@ -9,45 +9,10 @@ use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 
 class FriendController extends Controller
 {
-    public function showFriend()
-    {
-      $user_id = auth()->user()->id;
-
-      $results = Friend::select('friends.id', 'friends.friend_id', 'users.username', 'private_chats.message', 'private_chats.created_at')
-      ->join('users', 'friends.friend_id', '=', 'users.id')
-      ->join('private_chats', 'friends.id', '=', 'private_chats.friend_id')
-      ->whereIn('friends.friend_id', function ($query) use ($user_id) {
-          $query->select('user_id')
-              ->from('friends')
-              ->where('friend_id', $user_id);
-      })
-      ->where('friends.user_id', $user_id)
-      ->whereIn(DB::raw('(friends.id, private_chats.created_at)'), function ($query) use ($user_id) {
-          $query->select('friends.id', DB::raw('MAX(private_chats.created_at)'))
-              ->from('friends')
-              ->join('private_chats', 'friends.id', '=', 'private_chats.friend_id')
-              ->whereIn('friends.friend_id', function ($subquery) use ($user_id) {
-                  $subquery->select('user_id')
-                      ->from('friends')
-                      ->where('friend_id', $user_id);
-              })
-              ->where('friends.user_id', $user_id)
-              ->groupBy('friends.id');
-      })
-      ->orderBy('private_chats.created_at', 'desc')
-      ->get();
-
-      return response()->json([
-        "friends" => $results,
-        "result" => true
-      ]);
-    }
-
     public function addFriend(Request $request)
     {
       $request->validate([
