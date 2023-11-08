@@ -70,7 +70,7 @@ class ActivityChatController extends Controller
     }
         
       $message = new ActivityChat();
-      $message->activity_id = $existingMember->id;
+      $message->activity_id = $activity_id;
       $message->user_id = $user->id;
       $message->message = $messageText;
       $message->save();

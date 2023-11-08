@@ -12,8 +12,7 @@ class ActivityChat extends Model
     protected $fillable = [
         'activity_id',
         'user_id',
-        'create_date',
-        'delete_date'
+        'message'
     ];
     
     public function messages()
