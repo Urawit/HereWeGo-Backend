@@ -29,10 +29,18 @@ class FriendFactory extends Factory
     public function configure()
     {
       return $this->afterCreating(function (Friend $friend) {
-        Friend::create([
-            'user_id' => $friend->friend_id,
-            'friend_id' => $friend->user_id,
-        ]);
-    });
+        // Check if the reciprocal relationship already exists
+        $existingFriend = Friend::where('user_id', $friend->friend_id)
+            ->where('friend_id', $friend->user_id)
+            ->first();
+
+        // If the reciprocal relationship does not exist, create it
+        if (!$existingFriend) {
+            Friend::create([
+                'user_id' => $friend->friend_id,
+                'friend_id' => $friend->user_id,
+            ]);
+        }
+      });
     }
 }

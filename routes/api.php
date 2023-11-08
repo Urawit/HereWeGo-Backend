@@ -1,12 +1,12 @@
 <?php
 
+use App\Http\Controllers\Api\ActivityChatController;
 use App\Http\Controllers\Api\ActivityController;
 use App\Http\Controllers\Api\ActivityMemberController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\FriendController;
 use App\Http\Controllers\Api\MasterActivityController;
 use App\Http\Controllers\Api\NotificationController;
-use App\Http\Controllers\Api\PrivateChatController;
 use App\Http\Controllers\Api\UserActivityController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ChatController;
@@ -34,10 +34,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // Route::get('getMessage/{roomId}', [PrivateChat::class, 'getMessage']);
 // Route::post('createMessage/{roomID}', [PrivateChat::class, 'newMessage']);
 
-//from  https://pusher.com/tutorials/how-to-build-a-chat-app-with-vue-js-and-laravel/#defining-routes
 Route::post('/fetchMessages', [ChatController::class, 'fetchMessages']);
 Route::post('/messageStore', [ChatController::class, 'messageStore']);
 
+Route::post('/fetch-group-messages', [ActivityChatController::class, 'fetchGroupMessages']);
+Route::post('/group-message-store', [ActivityChatController::class, 'groupMessageStore']);
 
 Route::group([
     'middleware' => 'api',
@@ -63,7 +64,6 @@ Route::put('editActivity/{id}', [ActivityController::class, 'editActivity']);
 Route::post('createActivity', [ActivityController::class, 'createActivity']);
 Route::get('getActivity/{id}', [ActivityController::class, 'getActivity']);
 Route::get('getAllActivities', [ActivityController::class, 'getAllActivities']);
-Route::post('joinActivity/{id}', [ActivityMemberController::class, 'joinActivity']);
 
 Route::get('myFriends', [FriendController::class, 'showFriend']);
 Route::post('statusFriend', [FriendController::class, 'statusFriend']);
@@ -76,6 +76,8 @@ Route::post('selectActivities', [MasterActivityController::class, 'selectActivit
 
 Route::get('isMember/{id}', [ActivityMemberController::class, 'isMember']);
 Route::get('get-all-member/{id}', [ActivityMemberController::class, 'getAllMember']);
+Route::post('joinActivity/{id}', [ActivityMemberController::class, 'joinActivity']);
+Route::get('show-member-activity', [ActivityMemberController::class, 'showMemberActivity']);
 
 Route::get('userActivities', [UserActivityController::class, 'showUserActivities']);
 Route::post('addUserActivity', [UserActivityController::class, 'addUserActivities']);

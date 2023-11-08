@@ -3,65 +3,79 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreActivityChatRequest;
-use App\Http\Requests\UpdateActivityChatRequest;
 use App\Models\ActivityChat;
+use App\Models\ActivityMember;
+use Illuminate\Http\Request;
 
 class ActivityChatController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
+    public function __construct()
+   {
+       $this->middleware('auth');
+   }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreActivityChatRequest $request)
-    {
-        //
-    }
+   public function fetchGroupMessages(Request $request)
+   {
+    $request->validate([
+        "activity_id" => "required"
+    ]);
+    $user_id = auth()->user()->id;
+    $activity_id = $request->input('activity_id');
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(ActivityChat $activityChat)
-    {
-        //
-    }
+    $isMember = ActivityMember::where('user_id', auth()->user()->id)->where('activity_id', $activity_id)->first();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(ActivityChat $activityChat)
-    {
-        //
+    if (!$isMember) {
+        return response()->json([
+            'message' => 'You are not member',
+            'success' => false,
+        ]);
     }
+  
+    $result = ActivityChat::whereIn('activity_id', function($query) use ($user_id, $activity_id) {
+      $query->select('id')
+        ->from('activities')
+        ->where(function ($subquery) use ($user_id, $activity_id) {
+          $subquery->where('user_id', $user_id)
+            ->where('activity_id', $activity_id);
+        });
+    })->get();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateActivityChatRequest $request, ActivityChat $activityChat)
-    {
-        //
-    }
+    return response()->json([
+      "chats" => $result,
+      "result" => true
+    ]);
+   }
+   
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(ActivityChat $activityChat)
-    {
-        //
+   public function groupMessageStore(Request $request)
+   {
+    $request->validate([
+        "activity_id" => "required",
+        "message" => "required"
+    ]);
+    
+      $user = auth()->user();
+      $activity_id = $request->input('activity_id');
+      $messageText = $request->input('message');
+
+      $existingMember = ActivityMember::where('user_id', auth()->user()->id)->where('activity_id', $activity_id)->first();
+
+    if (!$existingMember) {
+        return response()->json([
+            'message' => 'You are not member',
+            'success' => false,
+        ]);
     }
+        
+      $message = new ActivityChat();
+      $message->activity_id = $existingMember->id;
+      $message->user_id = $user->id;
+      $message->message = $messageText;
+      $message->save();
+
+    //   broadcast(new SendPrivateChat($message))->toOthers();
+    
+      return ['status' => 'Message Sent!'];
+   }
 }

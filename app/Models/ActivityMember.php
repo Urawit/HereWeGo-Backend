@@ -14,14 +14,13 @@ class ActivityMember extends Model
         'activity_id'
     ];
 
-    public function users()
+    public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
-
-    public function activities()
+    public function activy()
     {
-        return $this->belongsTo(Activity::class);
+        return $this->belongsTo(Activity::class, 'activity_id', 'id');
     }
 
 }

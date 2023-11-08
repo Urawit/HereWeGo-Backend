@@ -44,7 +44,10 @@ class FriendController extends Controller
           "result" => false
         ]);
       };
-        
+
+      $sender_username = User::where('id', $user_id)->value('username');
+      $receiver_username = User::where('id', $friend_id)->value('username');
+      
       $friend = new Friend();
       $friend->user_id = $user_id;
       $friend->friend_id = $friend_id;
@@ -52,31 +55,31 @@ class FriendController extends Controller
 
       $havefriend = Friend::where('user_id', $friend_id)->where('friend_id', $user_id)->first();
       if ($havefriend) {
-        $notification = new Notification();
-        $notification->user_id = $user_id;
-        $notification->header = "Friend Request";
-        $notification->detail = "You have received a friend request.";
-        $notification->save();
-        broadcast(new SendNotification($notification))->toOthers();
+        // $notification = new Notification();
+        // $notification->user_id = $user_id;
+        // $notification->header = "Friend Request";
+        // $notification->detail = "You have received a friend request.";
+        // $notification->save();
+        // broadcast(new SendNotification($notification))->toOthers();
         
-        $notification = new Notification();
-        $notification->user_id = $friend_id;
-        $notification->header = "Friend Request";
-        $notification->detail = "Your friend has received your request.";
-        $notification->save();
-        broadcast(new SendNotification($notification))->toOthers();
+        // $notification = new Notification();
+        // $notification->user_id = $friend_id;
+        // $notification->header = "Friend Request";
+        // $notification->detail = "Your friend has received your request.";
+        // $notification->save();
+        // broadcast(new SendNotification($notification))->toOthers();
       } else {
         $notification = new Notification();
         $notification->user_id = $user_id;
         $notification->header = "Friend Request";
-        $notification->detail = "You have already sent a friend request.";
+        $notification->detail = "{$receiver_username} have received a friend request.";
         $notification->save();
         broadcast(new SendNotification($notification))->toOthers();
 
         $notification = new Notification();
         $notification->user_id = $friend_id;
         $notification->header = "Friend Request";
-        $notification->detail = "You received a friend request";
+        $notification->detail = "{$sender_username} have sent you a friend request";
         $notification->save();
         broadcast(new SendNotification($notification))->toOthers();
       }

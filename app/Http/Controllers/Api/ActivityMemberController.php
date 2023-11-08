@@ -89,4 +89,20 @@ class ActivityMemberController extends Controller
         $users = ActivityMember::where('activity_id', $activity_id)->with('user')->get();
         return $users->pluck('user');
     }
+
+    // chat
+    // used in messaage.page to display group that you are in -> just to chat
+    public function showMemberActivity()
+    {
+        $userId = auth()->id();
+
+        $activities = ActivityMember::join('activities','activity_members.activity_id', '=', 'activities.id')
+        ->where('activity_members.user_id',auth()->user()->id)
+        ->get('activities.name'); 
+
+        return response()->json([
+            'activities' => $activities,
+        ]);
+    }
+
 }
