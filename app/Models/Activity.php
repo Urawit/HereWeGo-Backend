@@ -46,4 +46,19 @@ class Activity extends Model
     {
         return $this->belongsTo(MasterActivity::class);
     }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class);
+    }
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
+    }
 }
+
