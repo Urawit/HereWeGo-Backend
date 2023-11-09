@@ -69,6 +69,34 @@ class ActivityMemberController extends Controller
         ]);
     }
 
+    public function unjoinActivity($id)
+    {
+        $user_id = auth()->user()->id;
+
+        $existingMember = ActivityMember::where('user_id', $user_id)->where('activity_id', $id)->first();
+
+        if ($existingMember) {
+            $existingMember->delete();
+
+            $notification = new Notification();
+            $notification->user_id = $user_id;
+            $notification->header = "Unjoin Activity";
+            $notification->detail = "You have left the activity.";
+            $notification->save();
+
+            broadcast(new SendNotification($user_id, "Notification"))->toOthers();
+
+            return response()->json([
+                'message' => 'You have left the activity successfully',
+                'success' => true,
+            ]);
+        }
+        return response()->json([
+            'message' => 'You were not a member of the activity',
+            'success' => false,
+        ]);
+    }
+
     public function isMember($id)
     {
         $user_id = auth()->user()->id;

@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
       $this->call(FriendSeeder::class);
       // $this->call(NotificationSeeder::class);
       $this->call(ActivitySeeder::class);
-      $this->call(ActivityMemberSeeder::class);
+      // $this->call(ActivityMemberSeeder::class);
       $this->call(CommentSeeder::class);
       $this->call(LikeSeeder::class);
       $this->call(FavoriteSeeder::class);

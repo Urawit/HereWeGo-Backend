@@ -85,6 +85,7 @@ Route::post('selectActivities', [MasterActivityController::class, 'selectActivit
 Route::get('isMember/{id}', [ActivityMemberController::class, 'isMember']);
 Route::get('get-all-member/{id}', [ActivityMemberController::class, 'getAllMember']);
 Route::post('joinActivity/{id}', [ActivityMemberController::class, 'joinActivity']);
+Route::post('unjoinActivity/{id}',[ActivityMemberController::class, 'unjoinActivity']);
 Route::get('show-member-activity', [ActivityMemberController::class, 'showMemberActivity']);
 
 Route::get('userActivities', [UserActivityController::class, 'showUserActivities']);

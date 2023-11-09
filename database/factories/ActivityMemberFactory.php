@@ -6,9 +6,6 @@ use App\Models\Activity;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ActivityMember>
- */
 class ActivityMemberFactory extends Factory
 {
     /**
@@ -18,9 +15,15 @@ class ActivityMemberFactory extends Factory
      */
     public function definition(): array
     {
-      return [
-        'user_id' => User::all()->random()->id,
-        'activity_id' => Activity::all()->random()->id,
-      ];
+        $userIds = User::pluck('id')->toArray();
+        $activityIds = Activity::pluck('id')->toArray();
+
+        $userId = $this->faker->unique()->randomElement($userIds);
+        $activityId = $this->faker->unique()->randomElement($activityIds);
+
+        return [
+            'user_id' => $userId,
+            'activity_id' => $activityId,
+        ];
     }
 }

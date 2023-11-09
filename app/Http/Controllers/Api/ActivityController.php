@@ -53,10 +53,17 @@ class ActivityController extends Controller
         $activity->start_date = $request->input('start_date'); 
         $activity->end_date = $request->input('end_date'); 
         $activity->save();
+
+        $activityMember = new ActivityMember();
+        $activityMember->user_id = $request->input('user_id');
+        $activityMember->activity_id = $activity->id;
+        $activityMember->save();
+
         return response()->json([
             'message' => 'activitiy created successfully',
             'success' => true,
-            'activity' => $activity
+            'activity' => $activity,
+            'activityMember' => $activityMember,
         ]);
     }
 
@@ -102,20 +109,21 @@ class ActivityController extends Controller
     }
 
     public function getActivity($id)
-    {
-        $activity = Activity::find($id);
-        if (!$activity) {
-            return response()->json([
-                'message' => 'Activity not found',
-                'success' => false,
-            ], 404);
-        }
+{
+    $activity = Activity::with('likes','comments','favorites','activityMembers')->find($id);
+    if (!$activity) {
         return response()->json([
-            'message' => 'Activity retrieved successfully',
-            'success' => true,
-            'activity' => $activity
-        ]);
+            'message' => 'Activity not found',
+            'success' => false,
+        ], 404);
     }
+    return response()->json([
+        'message' => 'Activity retrieved successfully',
+        'success' => true,
+        'activity' => $activity
+    ]);
+}
+
 
     public function getAllActivities()
     {
