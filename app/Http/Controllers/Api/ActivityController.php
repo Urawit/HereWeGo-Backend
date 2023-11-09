@@ -118,15 +118,15 @@ class ActivityController extends Controller
     }
 
     public function getAllActivities()
-    {
-        $activities = Activity::all()->where('end_date', '<=', 'now()');
+{
+    $activities = Activity::with('likes','comments','favorites')->get();
 
-        return response()->json([
-            'message' => 'All activities retrieved successfully',
-            'success' => true,
-            'activities' => $activities
-        ]);
-    }
+    return response()->json([
+        'message' => 'All activities retrieved successfully',
+        'success' => true,
+        'activities' => $activities
+    ]);
+}
 
     public function destroy($id)
     {

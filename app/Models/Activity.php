@@ -56,6 +56,7 @@ class Activity extends Model
     {
         return $this->hasMany(Favorite::class);
     }
+    
     public function likes()
     {
         return $this->hasMany(Like::class);
