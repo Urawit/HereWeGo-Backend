@@ -82,6 +82,7 @@ class UserController extends Controller
 
       return response()->json($myActivities);
     }
+
     public function myJoinActivities()
     {
       $myJoinActivities = ActivityMember::join('activities', 'activities.id', '=', 'activity_members.activity_id')
@@ -89,6 +90,15 @@ class UserController extends Controller
       ->get(['activity_id', 'name', 'detail', 'maximum', 'post_image_path', 'start_date', 'end_date','location']);
 
       return response()->json($myJoinActivities);
+    }
+
+    public function userJoinActivities(Request $request)
+    {
+      $userJoinActivities = ActivityMember::join('activities', 'activities.id', '=', 'activity_members.activity_id')
+      ->where("activity_members.user_id", $request->user_id)
+      ->get(['activity_id', 'name', 'detail', 'maximum', 'post_image_path', 'start_date', 'end_date','location']);
+
+      return response()->json($userJoinActivities);
     }
 
     public function getOnlineUser()

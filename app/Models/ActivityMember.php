@@ -18,7 +18,7 @@ class ActivityMember extends Model
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
-    public function activy()
+    public function activity()
     {
         return $this->belongsTo(Activity::class, 'activity_id', 'id');
     }

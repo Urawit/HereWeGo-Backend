@@ -118,15 +118,15 @@ class ActivityController extends Controller
     }
 
     public function getAllActivities()
-{
-    $activities = Activity::with('likes','comments','favorites')->get();
+    {
+        $activities = Activity::with('likes','comments','favorites','activityMembers')->get();
 
-    return response()->json([
-        'message' => 'All activities retrieved successfully',
-        'success' => true,
-        'activities' => $activities
-    ]);
-}
+        return response()->json([
+            'message' => 'All activities retrieved successfully',
+            'success' => true,
+            'activities' => $activities
+        ]);
+    }
 
     public function destroy($id)
     {
@@ -158,3 +158,4 @@ class ActivityController extends Controller
             'activities' => $activities,
         ]);
     }
+}
