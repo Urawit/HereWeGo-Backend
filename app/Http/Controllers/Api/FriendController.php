@@ -45,19 +45,19 @@ class FriendController extends Controller
 
       $havefriend = Friend::where('user_id', $friend_id)->where('friend_id', $user_id)->first();
       if ($havefriend) {
-        // $notification = new Notification();
-        // $notification->user_id = $user_id;
-        // $notification->header = "Friend Request";
-        // $notification->detail = "You have received a friend request.";
-        // $notification->save();
-        // broadcast(new SendNotification($notification))->toOthers();
+        $notification = new Notification();
+        $notification->user_id = $user_id;
+        $notification->header = "Friend Request";
+        $notification->detail = "{$receiver_username} is your friend.";
+        $notification->save();
+        broadcast(new SendNotification($user_id, "Notification"))->toOthers();
         
-        // $notification = new Notification();
-        // $notification->user_id = $friend_id;
-        // $notification->header = "Friend Request";
-        // $notification->detail = "Your friend has received your request.";
-        // $notification->save();
-        // broadcast(new SendNotification($notification))->toOthers();
+        $notification = new Notification();
+        $notification->user_id = $friend_id;
+        $notification->header = "Friend Request";
+        $notification->detail = "{$sender_username} is your friend.";
+        $notification->save();
+        broadcast(new SendNotification($friend_id, "Notification"))->toOthers();
       } else {
         $notification = new Notification();
         $notification->user_id = $user_id;
