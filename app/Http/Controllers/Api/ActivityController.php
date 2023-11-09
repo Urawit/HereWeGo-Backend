@@ -52,8 +52,6 @@ class ActivityController extends Controller
         $activity->maximum = $request->input('maximum'); 
         $activity->start_date = $request->input('start_date'); 
         $activity->end_date = $request->input('end_date'); 
-        $activity->create_date = now(); 
-        $activity->delete_date = null; 
         $activity->save();
         return response()->json([
             'message' => 'activitiy created successfully',
@@ -65,9 +63,11 @@ class ActivityController extends Controller
     public function editActivity(Request $request, $id)
     {
         $activity = Activity::find($id);
-        $request->validate([
-            "name" => "unique:activities",
-        ]);
+
+        $rules = [
+            'name' => 'unique:activities,name,' . $activity->id,
+        ];
+        $request->validate($rules);
 
         if ($request->hasFile('post_image')) {
             $file = $request->file('post_image');
@@ -76,23 +76,23 @@ class ActivityController extends Controller
             $activity->post_image_path = 'posts/' . $fileName;
         }
         #goal location
-        $activity->name = $request->input('name') ? $request->input('name') : $activity->name; 
-        $activity->detail = $request->input('detail') ? $request->input('datail') : $activity->detail ;
-        $activity->master_activity_id = $request->input('master_activity_id') ? $request->input('master_activity_id') : $activity->detail ;
-        $activity->maximum = $request->input('maximum')? $request->input('maximum') : $activity->maximum;
-        $activity->start_date = $request->input('start_date')? $request->input('start_date') : $activity->start_date; 
-        $activity->goal = $request->input('goal') ? $request->input('goal') : $activity->goal;
-        $activity->location = $request->input('location') ? $request->input('location') : $activity->location;
-        $activity->end_date = $request->input('end_date')? $request->input('end_date') : $activity->end_date;  
+        $activity->name = $request->input('name');
+        $activity->detail = $request->input('detail');
+        $activity->master_activity_id = $request->input('master_activity_id');
+        $activity->maximum = $request->input('maximum');
+        $activity->start_date = $request->input('start_date');
+        $activity->goal = $request->input('goal');
+        $activity->location = $request->input('location');
+        $activity->end_date = $request->input('end_date');
         $activity->save();
 
         $activityMember = ActivityMember::where('activity_id', $activity->id)->get();
         foreach ($activityMember as $member) {
-          $notification = new Notification();
-          $notification->user_id = $member->user_id;
-          $notification->header = "Edit Activity";
-          $notification->detail = "The activity has been updated.";
-          $notification->save();
+            $notification = new Notification();
+            $notification->user_id = $member->user_id;
+            $notification->header = "Edit Activity";
+            $notification->detail = "The activity has been updated.";
+            $notification->save();
         }
         return response()->json([
             "status" => true,
@@ -145,12 +145,16 @@ class ActivityController extends Controller
     }
     public function getActiveActivities()
     {
-        $activities = Activity::where('start_date', '>', now())->orderBy('start_date')->get();
+        $activities = Activity::where('start_date', '>', now())
+            ->with('likes', 'comments', 'favorites')
+            ->leftJoin('master_activities', 'activities.master_activity_id', '=', 'master_activities.id')
+            ->select('activities.*', 'master_activities.name AS master_name')
+            ->orderBy('start_date')->get();
+        // $masterActivities = MasterActivity::where("id", $activities->master_activities_id);
 
         return response()->json([
             'message' => 'All activities retrieved successfully',
             'success' => true,
-            'activities' => $activities
+            'activities' => $activities,
         ]);
     }
-}

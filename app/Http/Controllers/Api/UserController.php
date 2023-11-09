@@ -86,7 +86,7 @@ class UserController extends Controller
     {
       $myJoinActivities = ActivityMember::join('activities', 'activities.id', '=', 'activity_members.activity_id')
       ->where("activity_members.user_id", auth()->user()->id)
-      ->get(['activity_id', 'name', 'detail', 'maximum', 'post_image_path', 'start_date', 'end_date']);
+      ->get(['activity_id', 'name', 'detail', 'maximum', 'post_image_path', 'start_date', 'end_date','location']);
 
       return response()->json($myJoinActivities);
     }
