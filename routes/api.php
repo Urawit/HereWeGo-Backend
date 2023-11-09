@@ -65,7 +65,7 @@ Route::put('/editUser', [UserController::class, 'editUser']);
 Route::get('/myActivities', [UserController::class, 'myActivities']);
 Route::get('/myJoinActivities', [UserController::class, 'myJoinActivities']);
 Route::get('/userJoinActivities', [UserController::class, 'userJoinActivities']);
-Route::get('/find-user/{id}', [UserController::class, 'findUserByID']);
+Route::post('/findUserByID', [UserController::class, 'findUserByID']);
 
 Route::get('getActiveActivities', [ActivityController::class, 'getActiveActivities']);
 Route::put('editActivity/{id}', [ActivityController::class, 'editActivity']);
@@ -76,7 +76,7 @@ Route::get('getAllActivities', [ActivityController::class, 'getAllActivities']);
 //Route::get('myFriends', [FriendController::class, 'showFriend']);
 Route::post('statusFriend', [FriendController::class, 'statusFriend']);
 Route::post('addFriend', [FriendController::class, 'addFriend']);
-Route::delete('deleteFriend', [FriendController::class, 'deleteFriend']);
+Route::post('deleteFriend', [FriendController::class, 'deleteFriend']);
 
 Route::get('get-master-activity-name/{id}', [MasterActivityController::class, 'getMasterActivityName']);
 Route::get('allActivities', [MasterActivityController::class, 'allActivities']);

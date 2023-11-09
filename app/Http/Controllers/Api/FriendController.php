@@ -120,19 +120,15 @@ class FriendController extends Controller
       $user_id = auth()->user()->id;
       $friend_id = $request->get("friend_id");
 
-      $user = Friend::where('user_id', $friend_id)->where('friend_id', $user_id)->first();
       $friend = Friend::where('user_id', $user_id)->where('friend_id', $friend_id)->first();
-      if (!$friend) {
-        return response()->json([
-          "message" => "No friends with ID {$friend_id}.",
-          "result" => false
-        ]);
+      if ($friend) {
+        $friend->delete();
       }
-      
-      if($user) {
+
+      $user = Friend::where('user_id', $friend_id)->where('friend_id', $user_id)->first();
+      if ($user) {
         $user->delete();
       }
-      $friend->delete();
 
       return response()->json([
         "message" => "Delete Friend Success",
