@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\SendNotification;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreActivityMemberRequest;
 use App\Http\Requests\UpdateActivityMemberRequest;
@@ -52,6 +53,8 @@ class ActivityMemberController extends Controller
             $notification->header = "Join Activity";
             $notification->detail = "You have joined the activity.";
             $notification->save();
+
+            broadcast(new SendNotification($user_id, "Notification"))->toOthers();
 
             return response()->json([
                 'message' => 'You have joined the activity successfully',

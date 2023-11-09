@@ -2,23 +2,24 @@
 
 namespace App\Events;
 
-use App\Models\PrivateChat;
-use App\Models\User;
+use App\Models\ActivityChat;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class SendPrivateChat implements ShouldBroadcast
+class SendActivityChat implements ShouldBroadcast
 {
   use Dispatchable, InteractsWithSockets, SerializesModels;
 
   public $message;
+  public $activity;
 
-  public function __construct(PrivateChat $message)
+  public function __construct(ActivityChat $message, $activity)
   {
       $this->message = $message;
+      $this->activity = $activity;
   }
 
   public function broadcastOn()
@@ -27,6 +28,6 @@ class SendPrivateChat implements ShouldBroadcast
   }
   public function broadcastAs()
    {
-    return 'Message';
+    return 'Message' . $this->activity;
    }
 }

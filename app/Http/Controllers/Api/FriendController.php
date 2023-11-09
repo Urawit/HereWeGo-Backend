@@ -64,14 +64,14 @@ class FriendController extends Controller
         $notification->header = "Friend Request";
         $notification->detail = "{$receiver_username} have received a friend request.";
         $notification->save();
-        broadcast(new SendNotification($notification))->toOthers();
+        broadcast(new SendNotification($user_id, "Notification"))->toOthers();
 
         $notification = new Notification();
         $notification->user_id = $friend_id;
         $notification->header = "Friend Request";
         $notification->detail = "{$sender_username} have sent you a friend request";
         $notification->save();
-        broadcast(new SendNotification($notification))->toOthers();
+        broadcast(new SendNotification($friend_id, "Notification"))->toOthers();
       }
 
       return response()->json([

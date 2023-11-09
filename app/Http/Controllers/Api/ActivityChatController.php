@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\SendNotification;
+use App\Events\SendActivityChat;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityChat;
 use App\Models\ActivityMember;
@@ -30,15 +32,7 @@ class ActivityChatController extends Controller
             'success' => false,
         ]);
     }
-  
-    // $result = ActivityChat::whereIn('activity_id', function($query) use ($user_id, $activity_id) {
-    //   $query->select('id')
-    //     ->from('activities')
-    //     ->where(function ($subquery) use ($user_id, $activity_id) {
-    //       $subquery->where('user_id', $user_id)
-    //         ->where('activity_id', $activity_id);
-    //     });
-    // })->get();
+
     $result = ActivityChat::where('activity_id', $activity_id)
     ->join('users as us', 'us.id', '=', 'activity_chats.user_id')
     ->get();
@@ -63,12 +57,12 @@ class ActivityChatController extends Controller
 
       $existingMember = ActivityMember::where('user_id', auth()->user()->id)->where('activity_id', $activity_id)->first();
 
-    if (!$existingMember) {
+      if (!$existingMember) {
         return response()->json([
             'message' => 'You are not member',
             'success' => false,
         ]);
-    }
+      }
         
       $message = new ActivityChat();
       $message->activity_id = $activity_id;
@@ -76,7 +70,13 @@ class ActivityChatController extends Controller
       $message->message = $messageText;
       $message->save();
 
-    //   broadcast(new SendPrivateChat($message))->toOthers();
+      $activityMember = ActivityMember::where('activity_id', $activity_id)->get();
+
+      foreach ($activityMember as $member) {
+        broadcast(new SendActivityChat($message, $member->user_id))->toOthers();
+        broadcast(new SendNotification($member->user_id, "Message"))->toOthers();
+      }
+      
     
       return ['status' => 'Message Sent!'];
    }

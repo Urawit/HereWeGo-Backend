@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Events\Message;
+use App\Events\SendNotification;
+use App\Events\SendPrivateChat;
 use App\Http\Controllers\Controller;
 use App\Models\ChatRoom;
 use App\Models\PrivateChat;
 use App\Models\Friend;
-
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -57,7 +58,7 @@ class PrivateChatController extends Controller
        ->first();
      if (!$isFriend) {
        return response()->json([
-         "message" => "ID {$friend_id} not your friend.",
+         "message" => "ID {$friend->id} not your friend.",
          "result" => false
        ]);
      };
@@ -68,7 +69,8 @@ class PrivateChatController extends Controller
      $message->message = $messageText;
      $message->save();
 
-     broadcast(new SendPrivateChat($message))->toOthers();
+     broadcast(new SendPrivateChat($message, $friend))->toOthers();
+     broadcast(new SendNotification($friend->id, "Message"))->toOthers();
    
      return ['status' => 'Message Sent!'];
   }
