@@ -110,20 +110,20 @@ class ActivityController extends Controller
     }
 
     public function getActivity($id)
-{
-    $activity = Activity::with('likes','comments','favorites','activityMembers')->find($id);
-    if (!$activity) {
+    {
+        $activity = Activity::with('likes','comments.user','favorites','activityMembers')->find($id);
+        if (!$activity) {
+            return response()->json([
+                'message' => 'Activity not found',
+                'success' => false,
+            ], 404);
+        }
         return response()->json([
-            'message' => 'Activity not found',
-            'success' => false,
-        ], 404);
+            'message' => 'Activity retrieved successfully',
+            'success' => true,
+            'activity' => $activity
+        ]);
     }
-    return response()->json([
-        'message' => 'Activity retrieved successfully',
-        'success' => true,
-        'activity' => $activity
-    ]);
-}
 
 
     public function getAllActivities()
@@ -155,7 +155,7 @@ class ActivityController extends Controller
     public function getActiveActivities()
     {
         $activities = Activity::where('start_date', '>', now())
-            ->with('likes', 'comments', 'favorites')
+            ->with('likes', 'comments', 'favorites', 'activityMembers')
             ->leftJoin('master_activities', 'activities.master_activity_id', '=', 'master_activities.id')
             ->select('activities.*', 'master_activities.name AS master_name')
             ->orderBy('start_date')->get();

@@ -95,12 +95,12 @@ Route::delete('deleteUserActivity', [UserActivityController::class, 'deleteUserA
 Route::get('myNotification', [NotificationController::class, 'myNotification']);
 
 Route::post('like', [LikeController::class, 'like']);
-Route::post('unlike', [LikeController::class, 'unlike']);
+Route::delete('unlike', [LikeController::class, 'unlike']);
 
 Route::post('comment', [CommentController::class, 'comment']);
-Route::post('delete-comment', [CommentController::class, 'deleteComment']);
+Route::delete('delete-comment', [CommentController::class, 'deleteComment']);
 Route::put('edit-comment', [CommentController::class, 'editComment']);
 
 Route::post('favorite', [FavoriteController::class, 'favorite']);
-Route::post('unfavorite', [FavoriteController::class, 'unFavorite']);
+Route::delete('unfavorite', [FavoriteController::class, 'unFavorite']);
 
