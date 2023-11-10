@@ -74,7 +74,8 @@ Route::post('createActivity', [ActivityController::class, 'createActivity']);
 Route::get('getActivity/{id}', [ActivityController::class, 'getActivity']);
 Route::get('getAllActivities', [ActivityController::class, 'getAllActivities']);
 
-//Route::get('myFriends', [FriendController::class, 'showFriend']);
+// Route::get('myFriends', [FriendController::class, 'showFriend']);
+Route::get('friend', [FriendController::class, 'showFriend']);
 Route::post('statusFriend', [FriendController::class, 'statusFriend']);
 Route::post('addFriend', [FriendController::class, 'addFriend']);
 Route::post('deleteFriend', [FriendController::class, 'deleteFriend']);

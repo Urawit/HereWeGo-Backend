@@ -139,4 +139,26 @@ class FriendController extends Controller
         "result" => true
       ]);
     }
+
+    public function showFriend(Request $request)
+    {
+        $user_id = auth()->user()->id;
+
+        $friends = Friend::where('user_id', $user_id)->get();
+
+        $friendList = [];
+
+        foreach ($friends as $friend) {
+            $friend_id = $friend->friend_id;
+            $friend_username = User::where('id', $friend_id)->value('username');
+            $friendList[] = [
+                'friend_id' => $friend_id,
+                'friend_username' => $friend_username
+            ];
+        }
+
+        return response()->json([
+            'friendList' => $friendList
+        ]);
+    }
 }

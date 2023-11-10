@@ -33,21 +33,21 @@ class ActivityFactory extends Factory
         if ($masterActivity->id != $masterActivityIds[$masterActivityIndex]) {
             $masterActivity = MasterActivity::find($masterActivityIds[$masterActivityIndex]);
         }
-
+        $i = $this->faker->numberBetween(1, 6);
+        static $number = 1;
         // Create the Activity instance
         $activity = Activity::create([
             'user_id' => $user->id,
             'master_activity_id' => $masterActivity->id,
-            'name' => $this->faker->sentence,
+            'name' => "activity" . $number++,
             'detail' => $this->faker->paragraph,
             'goal' => $this->faker->paragraph,
             'location' => $this->faker->city,
             'maximum' => $this->faker->numberBetween(5, 20),
-            'post_image_path' => "avatars/default.png",
+            'post_image_path' => "posts/act{$i}.png",
             'start_date' => $this->faker->dateTimeBetween('-1 week', '+1 week'),
             'end_date' => $this->faker->dateTimeBetween('+2 weeks', '+4 weeks'),
         ]);
-
         ActivityMember::create([
             'user_id' => $activity->user_id,
             'activity_id' => $activity->id,
@@ -61,7 +61,7 @@ class ActivityFactory extends Factory
             'goal' => $this->faker->paragraph,
             'location' => $this->faker->city,
             'maximum' => $this->faker->numberBetween(5, 20),
-            'post_image_path' => "avatars/default.png",
+            'post_image_path' => "posts/act{$i}.png",
             'start_date' => $this->faker->dateTimeBetween('-1 week', '+1 week'),
             'end_date' => $this->faker->dateTimeBetween('+2 weeks', '+4 weeks'),
         ];
