@@ -45,6 +45,7 @@ Route::post('/fetch-group-messages', [ActivityChatController::class, 'fetchGroup
 Route::post('/group-message-store', [ActivityChatController::class, 'groupMessageStore']);
 
 Route::get('myFriends', [ChatController::class, 'chatAll']);
+Route::post('getNameChat', [ChatController::class, 'getName']);
 
 
 Route::group([

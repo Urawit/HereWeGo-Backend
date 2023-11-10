@@ -9,6 +9,7 @@ use App\Models\Message;
 use App\Models\User;
 use App\Models\PrivateChat;
 use App\Models\Friend;
+use App\Models\Activity;
 use App\Models\ActivityMember;
 use Illuminate\Support\Facades\DB;
 
@@ -118,5 +119,17 @@ class ChatController extends Controller
      ]);
    }
 
-
+   public function getName(Request $request)
+   {
+     $type = $request->get('type');
+     $id = $request->get('id');
+   
+     if ($type == 'friend') {
+       return User::where('id', $id)->first();
+     } elseif ($type == 'activity') {
+       return Activity::where('id', $id)->first();
+     }
+   
+     return false;
+   }
 }
