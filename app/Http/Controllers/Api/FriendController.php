@@ -46,6 +46,7 @@ class FriendController extends Controller
       $havefriend = Friend::where('user_id', $friend_id)->where('friend_id', $user_id)->first();
       if ($havefriend) {
         $notification = new Notification();
+        $notification->link_id = $friend_id;
         $notification->user_id = $user_id;
         $notification->header = "Friend Request";
         $notification->detail = "{$receiver_username} is your friend.";
@@ -53,6 +54,7 @@ class FriendController extends Controller
         broadcast(new SendNotification($user_id, "Notification"))->toOthers();
         
         $notification = new Notification();
+        $notification->link_id = $user_id;
         $notification->user_id = $friend_id;
         $notification->header = "Friend Request";
         $notification->detail = "{$sender_username} is your friend.";
@@ -60,6 +62,7 @@ class FriendController extends Controller
         broadcast(new SendNotification($friend_id, "Notification"))->toOthers();
       } else {
         $notification = new Notification();
+        $notification->link_id = $friend_id;
         $notification->user_id = $user_id;
         $notification->header = "Friend Request";
         $notification->detail = "{$receiver_username} have received a friend request.";
@@ -67,6 +70,7 @@ class FriendController extends Controller
         broadcast(new SendNotification($user_id, "Notification"))->toOthers();
 
         $notification = new Notification();
+        $notification->link_id = $user_id;
         $notification->user_id = $friend_id;
         $notification->header = "Friend Request";
         $notification->detail = "{$sender_username} have sent you a friend request";

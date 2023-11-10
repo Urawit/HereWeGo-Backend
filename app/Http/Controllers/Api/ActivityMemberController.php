@@ -13,28 +13,6 @@ use Illuminate\Support\Facades\Auth;
 
 class ActivityMemberController extends Controller
 {
-    // public function joinActivity($id)
-    // {
-    //     $user_id = Auth::id();
-
-    //     $activityMember = new ActivityMember();
-    //     $activityMember->user_id = $user_id;
-    //     $activityMember->activity_id = $id;
-    //     $activityMember->save();
-
-    //     $notification = new Notification();
-    //     $notification->user_id = $user_id;
-    //     $notification->header = "Join Activity";
-    //     $notification->detail = "You have joined activity.";
-    //     $notification->save();
-
-    //     return response()->json([
-    //         'message' => 'You have joined the activity successfully',
-    //         'success' => true,
-    //         'activity_member' => $activityMember
-    //     ]);
-    // }
-
     public function joinActivity($id)
     {
         $user_id = auth()->user()->id;
@@ -49,6 +27,7 @@ class ActivityMemberController extends Controller
             $activityMember->save();
 
             $notification = new Notification();
+            $notification->link_id = $id;
             $notification->user_id = $user_id;
             $notification->header = "Join Activity";
             $notification->detail = "You have joined the activity.";
@@ -79,6 +58,7 @@ class ActivityMemberController extends Controller
             $existingMember->delete();
 
             $notification = new Notification();
+            $notification->link_id = $id;
             $notification->user_id = $user_id;
             $notification->header = "Unjoin Activity";
             $notification->detail = "You have left the activity.";

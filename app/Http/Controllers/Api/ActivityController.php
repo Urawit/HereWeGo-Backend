@@ -96,6 +96,7 @@ class ActivityController extends Controller
         $activityMember = ActivityMember::where('activity_id', $activity->id)->get();
         foreach ($activityMember as $member) {
             $notification = new Notification();
+            $notification->link_id = $activity->id;
             $notification->user_id = $member->user_id;
             $notification->header = "Edit Activity";
             $notification->detail = "The activity has been updated.";

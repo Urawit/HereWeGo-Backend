@@ -11,10 +11,9 @@ class Notification extends Model
 
     protected $fillable = [
         'activity_id',
+        'link_id',
         'header',
-        'detail',
-        'create_date',
-        'delete_date'
+        'detail'
     ];
 
     public function activities()

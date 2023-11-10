@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
+            $table->integer('link_id');
             $table->string('header');
             $table->string('detail');
             $table->timestamps();
